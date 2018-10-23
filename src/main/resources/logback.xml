@@ -4,7 +4,7 @@
     scan="false" scanPeriod="1 minutes" debug="false">
 
     <!--定义日志文件的存储地址, 勿在 LogBack 的配置中使用相对路径 -->
-	<property name="LOG_HOME" value="c:/log4j" />
+	<property name="LOG_HOME" value="c:/logback" />
     
     <!-- 控制台打印 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
