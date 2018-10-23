@@ -34,152 +34,113 @@ public class LocationMsg extends PackageData {
 
 	public static class LocationInfo {
 		
-		private String carNumber; //车牌号码
-		private String devPhone; //终端sim
-		private String terminalIp; //终端ip地址
-		private String carState; //车辆状态
-		private float gpsPosX; //经度
-		private float gpsPosY; //纬度
-		private float gpsHeight; //高程
-		private float gpsSpeed; //速度
-		private float gpsDirect; //方向
-		private String sendDatetime; //时间(设备时间)
+		private String licNumber; //车牌号码
+		private String simNumber; //终端sim
+		private float longitude; //经度
+		private float latitude; //纬度
+		private float altitude; //高程
+		private float speed; //速度
+		private float direction; //方向
+		private String state; //车辆状态
+		private String reportTime; //时间(设备时间)
 		private String driverId; //司机ID
 		private String workPassport; //核准证
 		private byte boxClose; //车厢状态，1：关闭；2：打开
 		private byte boxUp; //举升状态，1：平放；2：举升；3：完全举升
 		private byte boxEmpty; //空重状态，1：空车；2：重车
-		private byte carWeigui; //违规情况，1：违规；0：未违规
-
+		private byte weigui; //违规情况，1：违规；0：未违规
 		
-		public String getDevPhone() {
-			return devPhone;
+		public String getLicNumber() {
+			return licNumber;
 		}
-
-		public void setDevPhone(String devPhone) {
-			this.devPhone = devPhone;
+		public void setLicNumber(String licNumber) {
+			this.licNumber = licNumber;
 		}
-		
-		public String getTerminalIp() {
-			return terminalIp;
+		public String getSimNumber() {
+			return simNumber;
 		}
-		
-		public void setTerminalIp(String terminalIp) {
-			this.terminalIp = terminalIp;
+		public void setSimNumber(String simNumber) {
+			this.simNumber = simNumber;
 		}
-
-		public String getCarState() {
-			return carState;
+		public String getState() {
+			return state;
 		}
-		
-		public void setCarState(String carState) {
-			this.carState = carState;
+		public void setState(String state) {
+			this.state = state;
 		}
-
-		public float getGpsPosX() {
-			return gpsPosX;
+		public float getLongitude() {
+			return longitude;
 		}
-
-		public void setGpsPosX(float gpsPosX) {
-			this.gpsPosX = gpsPosX;
+		public void setLongitude(float longitude) {
+			this.longitude = longitude;
 		}
-
-		public float getGpsPosY() {
-			return gpsPosY;
+		public float getLatitude() {
+			return latitude;
 		}
-		
-		public void setGpsPosY(float gpsPosY) {
-			this.gpsPosY = gpsPosY;
+		public void setLatitude(float latitude) {
+			this.latitude = latitude;
 		}
-
-		public float getGpsHeight() {
-			return gpsHeight;
+		public float getAltitude() {
+			return altitude;
 		}
-		
-		public void setGpsHeight(float gpsHeight) {
-			this.gpsHeight = gpsHeight;
+		public void setAltitude(float altitude) {
+			this.altitude = altitude;
 		}
-
-		public float getGpsSpeed() {
-			return gpsSpeed;
+		public float getSpeed() {
+			return speed;
 		}
-		
-		public void setGpsSpeed(float gpsSpeed) {
-			this.gpsSpeed = gpsSpeed;
+		public void setSpeed(float speed) {
+			this.speed = speed;
 		}
-
-		public float getGpsDirect() {
-			return gpsDirect;
+		public float getDirection() {
+			return direction;
 		}
-		
-		public void setGpsDirect(float gpsDirect) {
-			this.gpsDirect = gpsDirect;
+		public void setDirection(float direction) {
+			this.direction = direction;
 		}
-
-		public String getSendDatetime() {
-			return sendDatetime;
+		public String getReportTime() {
+			return reportTime;
 		}
-
-		public void setSendDatetime(String sendDatetime) {
-			this.sendDatetime = sendDatetime;
+		public void setReportTime(String reportTime) {
+			this.reportTime = reportTime;
 		}
-		
-		public String getCarNumber() {
-			return carNumber;
-		}
-
-		public void setCarNumber(String carNumber) {
-			this.carNumber = carNumber;
-		}
-		
 		public String getDriverId() {
 			return driverId;
 		}
-		
 		public void setDriverId(String driverId) {
 			this.driverId = driverId;
 		}
-		
 		public String getWorkPassport() {
 			return workPassport;
 		}
-		
 		public void setWorkPassport(String workPassport) {
 			this.workPassport = workPassport;
 		}
-
 		public byte getBoxClose() {
 			return boxClose;
 		}
-
 		public void setBoxClose(byte boxClose) {
 			this.boxClose = boxClose;
 		}
-		
 		public byte getBoxUp() {
 			return boxUp;
 		}
-
 		public void setBoxUp(byte boxUp) {
 			this.boxUp = boxUp;
 		}
-
 		public byte getBoxEmpty() {
 			return boxEmpty;
 		}
-
 		public void setBoxEmpty(byte boxEmpty) {
 			this.boxEmpty = boxEmpty;
 		}
-		
-		public byte getCarWeigui() {
-			return carWeigui;
+		public byte getWeigui() {
+			return weigui;
+		}
+		public void setWeigui(byte weigui) {
+			this.weigui = weigui;
 		}
 		
-		public void setCarWeigui(byte carWeigui) {
-			this.carWeigui = carWeigui;
-		}
-
 	}
 
 }

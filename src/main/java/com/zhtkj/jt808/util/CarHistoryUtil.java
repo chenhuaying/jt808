@@ -21,10 +21,10 @@ public class CarHistoryUtil {
 	
 	//判断是否需要写入车辆历史数据到数据库
 	public static boolean isPersistent(LocationInfo locationInfo) {
-		CarState lastCarState = carState.get(locationInfo.getCarNumber());
+		CarState lastCarState = carState.get(locationInfo.getLicNumber());
 		CarState newCarState = new CarState();
-		newCarState.setLongitude(locationInfo.getGpsPosX() + "");
-		newCarState.setLatitude(locationInfo.getGpsPosY() + "");
+		newCarState.setLongitude(locationInfo.getLongitude() + "");
+		newCarState.setLatitude(locationInfo.getLatitude() + "");
 		newCarState.setBoxUp(locationInfo.getBoxUp() + "");
 		newCarState.setBoxEmpty(locationInfo.getBoxEmpty() + "");
 		boolean result  = true;
@@ -52,7 +52,7 @@ public class CarHistoryUtil {
 			newCarState.setUpdateTime(new Date());
 			result =  true;
 		}
-		carState.put(locationInfo.getCarNumber(), newCarState);
+		carState.put(locationInfo.getLicNumber(), newCarState);
 		return result;
 	}
 	

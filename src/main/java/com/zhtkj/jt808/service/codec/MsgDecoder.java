@@ -92,26 +92,24 @@ public class MsgDecoder {
 		LocationInfo locationInfo = new LocationInfo();
 		byte[] bodybs = locationMsg.getMsgBody().getBodyBytes();
 		//设置终端手机号
-		locationInfo.setDevPhone(locationMsg.getMsgHead().getTerminalPhone());
-		//设置终端地址
-		locationInfo.setTerminalIp(locationMsg.getChannel().remoteAddress().toString());
+		locationInfo.setSimNumber(locationMsg.getMsgHead().getTerminalPhone());
 		//处理状态
-		locationInfo.setCarState(DigitUtil.byteToBinaryStr(bodybs[2]) + DigitUtil.byteToBinaryStr(bodybs[3]));
+		locationInfo.setState(DigitUtil.byteToBinaryStr(bodybs[2]) + DigitUtil.byteToBinaryStr(bodybs[3]));
         //处理经度
-        float gpsPosX = DigitUtil.byte4ToInt(bodybs, 4);
-        locationInfo.setGpsPosX(gpsPosX*25/9/1000000);
+        float longitude = DigitUtil.byte4ToInt(bodybs, 4);
+        locationInfo.setLongitude(longitude*25/9/1000000);
         //处理纬度
-        float gpsPosY = DigitUtil.byte4ToInt(bodybs, 8);
-        locationInfo.setGpsPosY(gpsPosY*25/9/1000000);
+        float latitude = DigitUtil.byte4ToInt(bodybs, 8);
+        locationInfo.setLatitude(latitude*25/9/1000000);
         //处理高程
-        float gpsHeight = DigitUtil.byte2ToInt(new byte[] {bodybs[12], bodybs[13]});
-        locationInfo.setGpsHeight(gpsHeight);
+        float altitude = DigitUtil.byte2ToInt(new byte[] {bodybs[12], bodybs[13]});
+        locationInfo.setAltitude(altitude);
         //处理速度
         float gpsSpeed = DigitUtil.byte2ToInt(new byte[] {bodybs[14], bodybs[15]});
-        locationInfo.setGpsSpeed(gpsSpeed);
+        locationInfo.setSpeed(gpsSpeed);
         //处理方向
-        float gpsDirect = DigitUtil.byte2ToInt(new byte[] {bodybs[16], bodybs[17]});
-        locationInfo.setGpsDirect(gpsDirect/100);
+        float direction = DigitUtil.byte2ToInt(new byte[] {bodybs[16], bodybs[17]});
+        locationInfo.setDirection(direction/100);
         //处理设备发送时间
         String year = DigitUtil.bcdToStr(bodybs[18]);
         String month = DigitUtil.bcdToStr(bodybs[19]);
@@ -119,11 +117,11 @@ public class MsgDecoder {
         String hour = DigitUtil.bcdToStr(bodybs[21]);
         String minute = DigitUtil.bcdToStr(bodybs[22]);
         String second = DigitUtil.bcdToStr(bodybs[23]);
-        String sendDatetime = "20" + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-        locationInfo.setSendDatetime(sendDatetime);
+        String reportTime = "20" + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        locationInfo.setReportTime(reportTime);
         //处理车牌号码
-        String carNumber = new String(DigitUtil.sliceBytes(bodybs, 24, 31), "GBK");
-		locationInfo.setCarNumber(carNumber);
+        String licNumber = new String(DigitUtil.sliceBytes(bodybs, 24, 31), "GBK");
+		locationInfo.setLicNumber(licNumber);
         //处理司机ID
         locationInfo.setDriverId(new String(DigitUtil.sliceBytes(bodybs, 32, 41)));
         //处理核准证ID
@@ -135,7 +133,7 @@ public class MsgDecoder {
         //处理空重状态
         locationInfo.setBoxEmpty(bodybs[54]);
         //处理违规情况
-        locationInfo.setCarWeigui(bodybs[55]);
+        locationInfo.setWeigui(bodybs[55]);
         locationMsg.setLocationInfo(locationInfo);
 		return locationMsg;
 	}
@@ -155,26 +153,24 @@ public class MsgDecoder {
         //开始处理位置信息
         byte[] locationbs = DigitUtil.sliceBytes(msgBodyBytes, 3, msgBodyBytes.length - 1);
 		//设置终端sim
-		locationInfo.setDevPhone(eventMsg.getMsgHead().getTerminalPhone());
-		//设置终端地址
-		locationInfo.setTerminalIp(eventMsg.getChannel().remoteAddress().toString());
+		locationInfo.setSimNumber(eventMsg.getMsgHead().getTerminalPhone());
 		//处理状态
-		locationInfo.setCarState(DigitUtil.byteToBinaryStr(locationbs[2]) + DigitUtil.byteToBinaryStr(locationbs[3]));
+		locationInfo.setState(DigitUtil.byteToBinaryStr(locationbs[2]) + DigitUtil.byteToBinaryStr(locationbs[3]));
         //处理经度
-        float gpsPosX = DigitUtil.byte4ToInt(locationbs, 4);
-        locationInfo.setGpsPosX(gpsPosX*25/9/1000000);
+        float longitude = DigitUtil.byte4ToInt(locationbs, 4);
+        locationInfo.setLongitude(longitude*25/9/1000000);
         //处理纬度
-        float gpsPosY = DigitUtil.byte4ToInt(locationbs, 8);
-        locationInfo.setGpsPosY(gpsPosY*25/9/1000000);
+        float latitude = DigitUtil.byte4ToInt(locationbs, 8);
+        locationInfo.setLatitude(latitude*25/9/1000000);
         //处理高程
-        float gpsHeight = DigitUtil.byte2ToInt(new byte[] {locationbs[12], locationbs[13]});
-        locationInfo.setGpsHeight(gpsHeight);
+        float altitude = DigitUtil.byte2ToInt(new byte[] {locationbs[12], locationbs[13]});
+        locationInfo.setAltitude(altitude);
         //处理速度
-        float gpsSpeed = DigitUtil.byte2ToInt(new byte[] {locationbs[14], locationbs[15]});
-        locationInfo.setGpsSpeed(gpsSpeed);
+        float speed = DigitUtil.byte2ToInt(new byte[] {locationbs[14], locationbs[15]});
+        locationInfo.setSpeed(speed);
         //处理方向
-        float gpsDirect = DigitUtil.byte2ToInt(new byte[] {locationbs[16], locationbs[17]});
-        locationInfo.setGpsDirect(gpsDirect/100);
+        float direction = DigitUtil.byte2ToInt(new byte[] {locationbs[16], locationbs[17]});
+        locationInfo.setDirection(direction/100);
         //处理设备发送时间
         String year = DigitUtil.bcdToStr(locationbs[18]);
         String month = DigitUtil.bcdToStr(locationbs[19]);
@@ -182,11 +178,11 @@ public class MsgDecoder {
         String hour = DigitUtil.bcdToStr(locationbs[21]);
         String minute = DigitUtil.bcdToStr(locationbs[22]);
         String second = DigitUtil.bcdToStr(locationbs[23]);
-        String sendDatetime = "20" + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-        locationInfo.setSendDatetime(sendDatetime);//此时间在显示完毕更新
+        String reportTime = "20" + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        locationInfo.setReportTime(reportTime);
         //处理车牌号码
         String carNumber = new String(DigitUtil.sliceBytes(locationbs, 24, 31), "GBK");
-		locationInfo.setCarNumber(carNumber);
+		locationInfo.setLicNumber(carNumber);
         //处理司机ID
         locationInfo.setDriverId(new String(DigitUtil.sliceBytes(locationbs, 32, 41)));
         //处理核准证ID
@@ -198,7 +194,7 @@ public class MsgDecoder {
         //处理空重状态
         locationInfo.setBoxEmpty(locationbs[54]);
         //处理违规情况
-        locationInfo.setCarWeigui(locationbs[55]);
+        locationInfo.setWeigui(locationbs[55]);
         eventInfo.setLocationInfo(locationInfo);
         eventMsg.setEventInfo(eventInfo);
 		return eventMsg;

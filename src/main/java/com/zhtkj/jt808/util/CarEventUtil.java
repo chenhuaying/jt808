@@ -16,7 +16,7 @@ public class CarEventUtil {
 	
 	//判断是否需要写入车辆事件数据到数据库
 	public static boolean isPersistent(EventInfo eventInfo) {
-		String carNumber = eventInfo.getLocationInfo().getCarNumber();
+		String carNumber = eventInfo.getLocationInfo().getLicNumber();
 		int eventType = eventInfo.getEventType();
 		if (carEventMap.get(carNumber) == null) {
 			Hashtable<Object,Object> innerMap = new Hashtable <Object, Object>();
