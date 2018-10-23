@@ -6,8 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zhtkj.jt808.application.SessionManager;
 import com.zhtkj.jt808.common.JT808Const;
-import com.zhtkj.jt808.server.SessionManager;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;

@@ -1,4 +1,4 @@
-package com.zhtkj.jt808.server;
+package com.zhtkj.jt808.application;
 
 import com.zhtkj.jt808.common.JT808Const;
 import com.zhtkj.jt808.service.TerminalMsgProcessService;

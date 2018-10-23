@@ -1,4 +1,4 @@
-package com.zhtkj.jt808.server;
+package com.zhtkj.jt808.application;
 
 import java.util.concurrent.TimeUnit;
 

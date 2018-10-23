@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.zhtkj.jt808.application.SessionManager;
 import com.zhtkj.jt808.mapper.CarRuntimeMapper;
-import com.zhtkj.jt808.server.SessionManager;
 import com.zhtkj.jt808.vo.Session;
 
 import io.netty.channel.Channel;
