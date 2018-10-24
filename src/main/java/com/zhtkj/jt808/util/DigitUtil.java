@@ -2,13 +2,7 @@ package com.zhtkj.jt808.util;
 
 public class DigitUtil {
 
-    /**
-     * @Description: 截取byte数组，含头含尾
-     * @param src
-     * @param start
-     * @param end
-     * @return byte[]  
-     */
+	//截取byte数组，含头含尾
     public static byte[] sliceBytes(byte[] src, Integer start, Integer end) {  
         byte[] target = new byte[end - start + 1];
         for (int i = start; i <= end; i++) {
@@ -17,11 +11,7 @@ public class DigitUtil {
         return target;
     }
     
-    /**
-     * @Description: 将1byte转为2进制字符串
-     * @param b
-     * @return String  
-     */
+    //byte转binary字符串
     public static String byteToBinaryStr(byte b) {
         return "" + (byte) ((b >> 7) & 0x1) + (byte) ((b >> 6) & 0x1)
                   + (byte) ((b >> 5) & 0x1) + (byte) ((b >> 4) & 0x1)
@@ -29,16 +19,19 @@ public class DigitUtil {
                   + (byte) ((b >> 1) & 0x1) + (byte) ((b >> 0) & 0x1);
     }
     
+    //2byte转int
     public static int byte2ToInt(byte[] src) {
     	int targets = (src[1] & 0xff) | ((src[0] << 8) & 0xff00);
         return targets;
     }
     
+    //4byte转int
     public static int byte4ToInt(byte[] src) {
         return (src[0] & 0xff) << 24 | (src[1] & 0xff) << 16 | (src[2] & 0xff) << 8 | src[3] & 0xff;
     }
     
-    public static long byte4ToInt(byte[] bs, int pos) {
+    //4byte转long
+    public static long byte4ToLong(byte[] bs, int pos) {
         int byte1 = 0;
         int byte2 = 0;
         int byte3 = 0;
@@ -52,6 +45,7 @@ public class DigitUtil {
         return ((long) (byte1 << 24 | byte2 << 16 | byte3 << 8 | byte4)) & 0xFFFFFFFFL;
     }
     
+    //byte转binary字符串
     public static String byteToBinaryStr(byte src, Integer high, Integer low) {
     	String str = "";
     	for (int i = high; i >= low; i--) {
@@ -60,6 +54,7 @@ public class DigitUtil {
     	return str;
     }
     
+    //binary字符串转byte
     public static byte binaryStrToByte(String str){
         byte bt = 0;
         for(int i = str.length()-1, j = 0; i >= 0; i--, j++){
@@ -68,6 +63,7 @@ public class DigitUtil {
         return bt;
     }
     
+    //short转2byte
     public static byte[] shortTo2Byte(short s) {
         byte[] target = new byte[2];
         for (int i = 0; i < 2; i++) {
@@ -77,6 +73,7 @@ public class DigitUtil {
         return target;
     }
     
+    //int转4byte, 先高位再低位
     public static byte[] intTo4Byte(int src) {
         byte[] targets = new byte[4];
         for (int i = 0; i < 4; i++) {
@@ -86,15 +83,17 @@ public class DigitUtil {
         return targets;
     }
     
-    public static byte[] int32To4Byte(int src) {
+    //int转4byte, 先低位再高位
+    public static byte[] intTo4ByteRev(int src) {
         byte[] targets = new byte[4];
-        targets[0] = (byte) (src & 0xff); // 最低位
-        targets[1] = (byte) ((src >> 8) & 0xff); //次低位
-        targets[2] = (byte) ((src >> 16) & 0xff); // 次高位
-        targets[3] = (byte) (src >>> 24); //最高位,无符号右移。
+        targets[0] = (byte) (src & 0xff);
+        targets[1] = (byte) ((src >> 8) & 0xff);
+        targets[2] = (byte) ((src >> 16) & 0xff);
+        targets[3] = (byte) (src >>> 24);
         return targets;
     }
     
+    //字节数组bcd编码转字符串
     public static String bcdToStr(byte[] bytes) {  
         StringBuffer sb = new StringBuffer(bytes.length * 2);  
         for (int i = 0; i < bytes.length; i++) {  
@@ -105,13 +104,15 @@ public class DigitUtil {
                 .toString().substring(1) : sb.toString();  
     }
     
-    public static String bcdToStr(byte bytes) {
+    //一字节bcd编码转字符串
+    public static String bcdToStr(byte bt) {
         StringBuffer sb = new StringBuffer(2);
-        sb.append((byte) ((bytes & 0xf0) >>> 4));
-        sb.append((byte) (bytes & 0x0f));
+        sb.append((byte) ((bt & 0xf0) >>> 4));
+        sb.append((byte) (bt & 0x0f));
         return sb.toString().substring(0, 1).equalsIgnoreCase("0") ? sb.toString().substring(1) : sb.toString();
     }
     
+    //字符串转bcd编码
     public static byte[] strToBcd(String asc) {
         int len = asc.length();
         int mod = len % 2;
@@ -148,6 +149,7 @@ public class DigitUtil {
         return bbt;
     }
     
+    //获取808协议校验码
     public static int get808PackCheckCode(byte[] bs) {
     	int checkCode = 0;
         if (bs.length < 3) {

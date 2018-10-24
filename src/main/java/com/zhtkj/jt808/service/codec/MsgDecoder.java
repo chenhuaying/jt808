@@ -96,10 +96,10 @@ public class MsgDecoder {
 		//处理状态
 		locationInfo.setState(DigitUtil.byteToBinaryStr(bodybs[2]) + DigitUtil.byteToBinaryStr(bodybs[3]));
         //处理经度
-        float longitude = DigitUtil.byte4ToInt(bodybs, 4);
+        float longitude = DigitUtil.byte4ToLong(bodybs, 4);
         locationInfo.setLongitude(longitude*25/9/1000000);
         //处理纬度
-        float latitude = DigitUtil.byte4ToInt(bodybs, 8);
+        float latitude = DigitUtil.byte4ToLong(bodybs, 8);
         locationInfo.setLatitude(latitude*25/9/1000000);
         //处理高程
         float altitude = DigitUtil.byte2ToInt(new byte[] {bodybs[12], bodybs[13]});
@@ -145,7 +145,7 @@ public class MsgDecoder {
 		LocationInfo locationInfo = new LocationInfo();
 		byte[] msgBodyBytes = eventMsg.getMsgBody().getBodyBytes();
         //处理事件流水号
-        long eventSerialId = DigitUtil.byte4ToInt(DigitUtil.sliceBytes(msgBodyBytes, 2, 5), 0);
+        long eventSerialId = DigitUtil.byte4ToLong(DigitUtil.sliceBytes(msgBodyBytes, 2, 5), 0);
         eventInfo.setEventSerialId(eventSerialId);
         //处理事件类型
         eventInfo.setEventType((int) msgBodyBytes[6]);
@@ -157,10 +157,10 @@ public class MsgDecoder {
 		//处理状态
 		locationInfo.setState(DigitUtil.byteToBinaryStr(locationbs[2]) + DigitUtil.byteToBinaryStr(locationbs[3]));
         //处理经度
-        float longitude = DigitUtil.byte4ToInt(locationbs, 4);
+        float longitude = DigitUtil.byte4ToLong(locationbs, 4);
         locationInfo.setLongitude(longitude*25/9/1000000);
         //处理纬度
-        float latitude = DigitUtil.byte4ToInt(locationbs, 8);
+        float latitude = DigitUtil.byte4ToLong(locationbs, 8);
         locationInfo.setLatitude(latitude*25/9/1000000);
         //处理高程
         float altitude = DigitUtil.byte2ToInt(new byte[] {locationbs[12], locationbs[13]});
