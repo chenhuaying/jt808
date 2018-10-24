@@ -1,35 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://www.padual.com/java/logback.xsd"
-    scan="false" scanPeriod="1 minutes" debug="false">
+    scan="false" debug="false">
 
     <!--定义日志文件的存储地址, 勿在 LogBack 的配置中使用相对路径 -->
 	<property name="LOG_HOME" value="c:/logback" />
     
-    <!-- 控制台打印 -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder charset="UTF-8">
-            <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %m%n
-            </pattern>
+	<!-- 控制台日志输出 -->  
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    	<encoder>  
+      		<pattern>%d{yyyy-MM-dd HH:mm:ss} %logger{35} - %msg%n</pattern>  
+    	</encoder>
+    </appender>
+    
+    <!-- info文件日志输出 --> 
+    <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/jt808-server-info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/jt808-server-info-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        	<level>INFO</level>
+        	<onMatch>ACCEPT</onMatch> 
+			<onMismatch>DENY</onMismatch> 
+		</filter>
+		<encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
-	
-	<!-- 写入日志文件 -->
-  	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-  		<file>${LOG_HOME}/netty-server.log</file>
-    	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>${LOG_HOME}/netty-server-%d{yyyy-MM-dd}.log</fileNamePattern>
-      		<maxHistory>30</maxHistory>
-    	</rollingPolicy>
-    	<encoder>
-      		<pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
-    	</encoder>
-  	</appender>
+    
+    <!-- error文件日志输出 --> 
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/jt808-server-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/jt808-server-error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        	<level>ERROR</level>
+        	<onMatch>ACCEPT</onMatch> 
+			<onMismatch>DENY</onMismatch> 
+		</filter>
+		<encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- 设置包下面日志级别 -->
+    <logger name="org.springframework" level="ERROR">
+        <appender-ref ref="errorAppender" />
+    </logger>
+    <logger name="com.zhtkj" level="DEBUG">
+        <appender-ref ref="console" />
+    </logger>
     
 	<!-- 日志输出级别 -->
 	<root level="INFO">
-		<appender-ref ref="STDOUT"/>
-		<appender-ref ref="FILE"/>
+		<appender-ref ref="console" /> 
+		<appender-ref ref="infoAppender" /> 
+		<appender-ref ref="errorAppender" />
 	</root>
 
 </configuration>
