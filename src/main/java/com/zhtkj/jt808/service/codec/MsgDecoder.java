@@ -213,8 +213,8 @@ public class MsgDecoder {
     	}
     	String[] terminalInfo = new String(infobs, "utf8").split(",");
     	versionInfo.setMac(terminalInfo[0]);
-    	versionInfo.setCarNumber(terminalInfo[1]);
-    	versionInfo.setDevPhone(packageData.getMsgHead().getTerminalPhone());
+    	versionInfo.setLicNumber(terminalInfo[1]);
+    	versionInfo.setSimNumber(packageData.getMsgHead().getTerminalPhone());
     	versionInfo.setVersion(terminalInfo[2]);
     	versionInfo.setEcuType(ecuType.toString());
     	versionInfo.setCarType(carType.toString());

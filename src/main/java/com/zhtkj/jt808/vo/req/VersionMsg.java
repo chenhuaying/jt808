@@ -31,8 +31,8 @@ public class VersionMsg extends PackageData {
 	public static class VersionInfo {
 		
 		private String mac;
-		private String carNumber;
-		private String devPhone;
+		private String licNumber;
+		private String simNumber;
 		private String ecuType;
 		private String carType;
 		private String version;
@@ -45,22 +45,22 @@ public class VersionMsg extends PackageData {
 			this.mac = mac;
 		}
 		
-		public String getCarNumber() {
-			return carNumber;
+		public String getLicNumber() {
+			return licNumber;
 		}
-		
-		public void setCarNumber(String carNumber) {
-			this.carNumber = carNumber;
+
+		public void setLicNumber(String licNumber) {
+			this.licNumber = licNumber;
 		}
-		
-		public String getDevPhone() {
-			return devPhone;
+
+		public String getSimNumber() {
+			return simNumber;
 		}
-		
-		public void setDevPhone(String devPhone) {
-			this.devPhone = devPhone;
+
+		public void setSimNumber(String simNumber) {
+			this.simNumber = simNumber;
 		}
-		
+
 		public String getEcuType() {
 			return ecuType;
 		}
