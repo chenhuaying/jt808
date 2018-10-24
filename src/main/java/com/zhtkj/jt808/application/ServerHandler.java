@@ -88,7 +88,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 			VersionMsg msg = this.msgDecoder.toVersionMsg(packageData);
 			this.msgProcessService.processVersionMsg(msg);
 		} else if (bodyId == JT808Const.TASK_BODY_ID_CONFIG) {
-			this.msgProcessService.processConfigMsg(packageData);
+			this.msgProcessService.processDeviceConfigMsg(packageData);
 		}
 		
 		//命令类业务处理，这里是接收下发命令的响应，不是下发命令

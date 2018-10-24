@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhtkj.jt808.mapper.ConfigMapper">
 
-	<insert id="insertConfig">
+	<insert id="insertDeviceConfig">
 		insert into zt_config (
 		  mac,
-		  car_number,
-		  dev_phone,
+		  lic_number,
+		  sim_number,
 		  version,
 		  version_sys,
 		  ecu_type,
@@ -18,8 +18,8 @@
 		values
 		  (
 		  	'${configInfo.mac}',
-		    '${configInfo.carNumber}',
-		    '${configInfo.devPhone}',
+		    '${configInfo.licNumber}',
+		    '${configInfo.simNumber}',
 		    '${configInfo.version}',
 		    '${configInfo.version}',
 		    '${configInfo.ecuType}',
@@ -30,12 +30,12 @@
 		  ) 
 	</insert>
 	
-	<update id="updateConfig">
+	<update id="updateDeviceConfig">
 		update 
-		  zt_config
+		  zt_device_config
 		set 
-		  car_number = '${configInfo.carNumber}',
-		  dev_phone = '${configInfo.devPhone}',
+		  lic_number = '${configInfo.licNumber}',
+		  sim_number = '${configInfo.simNumber}',
 		  version = '${configInfo.version}',
 		  ecu_type = '${configInfo.ecuType}',
 		  car_type = '${configInfo.carType}',

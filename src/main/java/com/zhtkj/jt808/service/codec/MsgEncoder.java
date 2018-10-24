@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.zhtkj.jt808.common.JT808Const;
-import com.zhtkj.jt808.entity.Config;
+import com.zhtkj.jt808.entity.DeviceConfig;
 import com.zhtkj.jt808.entity.DataAction;
 import com.zhtkj.jt808.entity.DataParam;
 import com.zhtkj.jt808.util.ArrayUtil;
@@ -118,11 +118,11 @@ public class MsgEncoder {
 	}
 	
 	//生成终端配置信息上报响应包
-	public byte[] encode4ConfigResp(PackageData packageData, Config config) throws UnsupportedEncodingException {
+	public byte[] encode4ConfigResp(PackageData packageData, DeviceConfig config) throws UnsupportedEncodingException {
     	byte[] bodyidbs = DigitUtil.shortTo2Byte((short) JT808Const.TASK_BODY_ID_CONFIG);
         byte[] headserialbs = DigitUtil.intTo4ByteRev(packageData.getMsgHead().getHeadSerial());
 		byte[] macbs = config.getMac().getBytes();
-		byte[] configbs = (config.getCarNumber() + "," + config.getDevPhone() + "," 
+		byte[] configbs = (config.getLicNumber() + "," + config.getSimNumber() + "," 
 				+ config.getVersion() + "," + config.getEcuType() + "," + config.getCarType()).getBytes();
 		byte[] bodybs = ArrayUtil.concatAll(bodyidbs, headserialbs, macbs, configbs);
 		byte[] msgbs = this.encode4Msg(JT808Const.TASK_HEAD_ID, packageData.getMsgHead().getTerminalPhone(), bodybs);

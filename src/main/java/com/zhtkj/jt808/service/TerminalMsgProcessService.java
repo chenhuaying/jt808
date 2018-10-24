@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.zhtkj.jt808.common.JT808Const;
-import com.zhtkj.jt808.entity.Config;
+import com.zhtkj.jt808.entity.DeviceConfig;
 import com.zhtkj.jt808.mapper.CarEventMapper;
 import com.zhtkj.jt808.mapper.CarHistoryMapper;
 import com.zhtkj.jt808.mapper.CarRuntimeMapper;
-import com.zhtkj.jt808.mapper.ConfigMapper;
+import com.zhtkj.jt808.mapper.DeviceConfigMapper;
 import com.zhtkj.jt808.mapper.DataActionMapper;
 import com.zhtkj.jt808.mapper.DataParamMapper;
 import com.zhtkj.jt808.service.codec.MsgEncoder;
@@ -56,7 +56,7 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     private DataParamMapper dataParamMapper;
     
 	@Autowired
-    private ConfigMapper configMapper;
+    private DeviceConfigMapper deviceConfigMapper;
 	
     //处理终端登录业务
     public void processLoginMsg(PackageData packageData) throws Exception {
@@ -108,11 +108,11 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     //处理终端版本信息业务
     public void processVersionMsg(VersionMsg versionMsg) throws InterruptedException {
     	VersionInfo versionInfo = versionMsg.getVersionInfo();
-    	if (configMapper.updateConfig(versionInfo) == 0) {
-    		configMapper.insertConfig(versionInfo);
+    	if (deviceConfigMapper.updateDeviceConfig(versionInfo) == 0) {
+    		deviceConfigMapper.insertDeviceConfig(versionInfo);
     	}
     	int replyResult = 3;
-    	Config config = configMapper.selectConfigByKey(versionInfo.getMac()).get(0);
+    	DeviceConfig config = deviceConfigMapper.selectDeviceConfigByKey(versionInfo.getMac()).get(0);
     	String[] versions = config.getVersion().replace("V", "").split("\\.");
     	String[] sysVersions = config.getVersionSys().replace("V", "").split("\\.");
     	int updateTag = config.getUpdateTag();
@@ -148,15 +148,15 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     }
     
     //处理终端配置更新业务
-    public void processConfigMsg(PackageData packageData) throws Exception {
+    public void processDeviceConfigMsg(PackageData packageData) throws Exception {
 		byte[] bodybs = packageData.getMsgBody().getBodyBytes();
     	byte[] macbs = DigitUtil.sliceBytes(bodybs, 12, 28);
     	String mac = new String(macbs);
-    	List<Config> configs = configMapper.selectConfigByKey(mac);
+    	List<DeviceConfig> configs = deviceConfigMapper.selectDeviceConfigByKey(mac);
     	if (configs.size() > 0) {
-    		Config config = configs.get(0);
+    		DeviceConfig config = configs.get(0);
     		//车辆信息中车牌号包含4412或者终端手机号码是17775754123时，不下发配置文件
-			if (!config.getCarNumber().contains("4412") && !config.getDevPhone().equals("17775754123")) {
+			if (!config.getLicNumber().contains("4412") && !config.getSimNumber().equals("17775754123")) {
 	        	byte[] bs = msgEncoder.encode4ConfigResp(packageData, config);
 	        	super.send2Terminal(packageData.getChannel(), bs);
 			}
