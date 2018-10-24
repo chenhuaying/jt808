@@ -128,7 +128,6 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 					dataParamMapper.updateParamReceiveResult(param.getParamId(), -1);
 				}
 			} catch (Exception e) {
-				dataParamMapper.updateParamReceiveResult(param.getParamId(), -1);
 				e.printStackTrace();
 			}
     	}
