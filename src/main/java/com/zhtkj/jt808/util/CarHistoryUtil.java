@@ -16,8 +16,8 @@ public class CarHistoryUtil {
 
 	private static Map<String, CarState> carState = new Hashtable<String, CarState>();
 	
-	//gps坐标连续相同次数
-	private static Long GPS_SAME_TOTAL = 10L;
+	//位置信息连续相同次数
+	private static Long LOCATION_SAME_TOTAL = 10L;
 	
 	//判断是否需要写入车辆历史数据到数据库
 	public static boolean isPersistent(LocationInfo locationInfo) {
@@ -29,18 +29,18 @@ public class CarHistoryUtil {
 		newCarState.setBoxEmpty(locationInfo.getBoxEmpty() + "");
 		boolean result  = true;
 		if (lastCarState == null) {
-			newCarState.setGpsSameTotal(0L);
+			newCarState.setLocSameTotal(0L);
 			newCarState.setUpdateTime(new Date());
 			result =  true;
 		} else if (newCarState.getLongitude().equals(lastCarState.getLongitude()) && 
 				   newCarState.getLatitude().equals(lastCarState.getLatitude()) && 
 				   newCarState.getBoxUp().equals(lastCarState.getBoxUp()) && 
 				   newCarState.getBoxEmpty().equals(lastCarState.getBoxEmpty())) {
-			newCarState.setGpsSameTotal(lastCarState.getGpsSameTotal() + 1);
+			newCarState.setLocSameTotal(lastCarState.getLocSameTotal() + 1);
 			if (new DateTime(lastCarState.getUpdateTime()).plusMinutes(15).isBeforeNow()) {
 				newCarState.setUpdateTime(new Date());
 				result = true;
-			} else if (newCarState.getGpsSameTotal() >= GPS_SAME_TOTAL) {
+			} else if (newCarState.getLocSameTotal() >= LOCATION_SAME_TOTAL) {
 				newCarState.setUpdateTime(lastCarState.getUpdateTime());
 				result = false;
 			} else {
@@ -48,7 +48,7 @@ public class CarHistoryUtil {
 				result = true;
 			}
 		} else {
-			newCarState.setGpsSameTotal(0L);
+			newCarState.setLocSameTotal(0L);
 			newCarState.setUpdateTime(new Date());
 			result =  true;
 		}
@@ -64,7 +64,7 @@ class CarState {
 	public String latitude;
 	public String boxUp;
 	public String boxEmpty;
-	public Long gpsSameTotal;
+	public Long locSameTotal;
 	public Date updateTime;
 	
 	public String getLongitude() {
@@ -107,12 +107,12 @@ class CarState {
 		this.updateTime = updateTime;
 	}
 
-	public Long getGpsSameTotal() {
-		return gpsSameTotal;
+	public Long getLocSameTotal() {
+		return locSameTotal;
 	}
 
-	public void setGpsSameTotal(Long gpsSameTotal) {
-		this.gpsSameTotal = gpsSameTotal;
+	public void setLocSameTotal(Long locSameTotal) {
+		this.locSameTotal = locSameTotal;
 	}
 	
 }
