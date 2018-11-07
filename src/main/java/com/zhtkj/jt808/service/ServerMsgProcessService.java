@@ -66,7 +66,7 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 				Channel channel = sessionManager.getChannelByKey(action.getLicNumber());
 				if (channel != null && channel.isOpen()) {
 					//发送byte[]给终端并更新receive_result状态
-					send2Terminal(channel, msgbs);
+					super.send2Terminal(channel, msgbs);
 					dataActionMapper.updateActionReceiveResult(action.getActionId(), 1);
 				} else {
 					dataActionMapper.updateActionReceiveResult(action.getActionId(), -1);
