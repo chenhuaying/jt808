@@ -17,7 +17,7 @@ public class SessionManager {
 
 	private static volatile SessionManager instance = null;
 
-	//键:终端手机号, 值:session
+	//键:车牌号码, 值:session
 	private static Map<String, Session> sessionMap;
 
 	private SessionManager() {
@@ -39,28 +39,28 @@ public class SessionManager {
 		return sessionMap;
 	}
 	
-	public synchronized boolean containsKey(String terminalPhone) {
-		return sessionMap.containsKey(terminalPhone);
+	public synchronized boolean containsKey(String licNumber) {
+		return sessionMap.containsKey(licNumber);
 	}
 	
-	public synchronized Channel getChannelByKey(String terminalPhone) {
-		if (sessionMap.get(terminalPhone) == null) {
+	public synchronized Channel getChannelByKey(String licNumber) {
+		if (sessionMap.get(licNumber) == null) {
 			return null;
 		} else {
-			return sessionMap.get(terminalPhone).getChannel();
+			return sessionMap.get(licNumber).getChannel();
 		}
 	}
 	
-	public synchronized Session addSession(String terminalPhone, Session session) {
-		return sessionMap.put(terminalPhone, session);
+	public synchronized Session addSession(String licNumber, Session session) {
+		return sessionMap.put(licNumber, session);
 	}
 	
-	public synchronized Session findSessionByKey(String terminalPhone) {
-		return sessionMap.get(terminalPhone);
+	public synchronized Session findSessionByKey(String licNumber) {
+		return sessionMap.get(licNumber);
 	}
 
-	public synchronized void removeSessionByKey(String terminalPhone) {
-		sessionMap.remove(terminalPhone);
+	public synchronized void removeSessionByKey(String licNumber) {
+		sessionMap.remove(licNumber);
 	}
 
 	public synchronized void removeSessionByChannelId(String channelId) {

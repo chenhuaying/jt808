@@ -1,188 +1,198 @@
 package com.zhtkj.jt808.entity;
 
+import java.sql.Time;
 import java.util.Date;
 
 public class SendParam {
 	
-	private int paramId;
-	private String carPass;
-	private byte dealResult;
-	private Date dealTime;
-	private String endHourtime;
-	private String endTime;
-	private byte limitValue;
-	private byte paramDeal;
-	private byte paramType;
-	private String phoneNumber;
-	private Date storeTime;
-	private byte receiveResult;
-	private int resendCount;
-	private String sendPerson;
-	private String sendRemark;
-	private String startHourtime;
-	private String startTime;
-	private Integer typeId;
-	private String typeName;
-	private String typeValue;
+	private Integer paramId;
+	private Integer tenantId;
+	private String licNumber;
+	private String simNumber;
+	private Integer paramType;
+	private Integer paramValue;
+	private String paramData;
+	private Integer dataId;
+	private String dataName;
+	private Integer limitValue;
+	private Date startDate;
+	private Date endDate;
+	private Time startTime;
+	private Time endTime;
+	private Integer receiveResult;
+	private Integer handleResult;
+	private Date handleTime;
+	private Integer resendCount;
+	private Date createTime;
+	private String sendUser;
+	private String remark;
 	
-	public int getParamId() {
+	public Integer getParamId() {
 		return paramId;
 	}
 	
-	public void setParamId(int paramId) {
+	public void setParamId(Integer paramId) {
 		this.paramId = paramId;
 	}
 	
-	public String getCarPass() {
-		return carPass;
+	public Integer getTenantId() {
+		return tenantId;
 	}
 	
-	public void setCarPass(String carPass) {
-		this.carPass = carPass;
+	public void setTenantId(Integer tenantId) {
+		this.tenantId = tenantId;
 	}
 	
-	public byte getDealResult() {
-		return dealResult;
+	public String getLicNumber() {
+		return licNumber;
 	}
 	
-	public void setDealResult(byte dealResult) {
-		this.dealResult = dealResult;
+	public void setLicNumber(String licNumber) {
+		this.licNumber = licNumber;
 	}
 	
-	public Date getDealTime() {
-		return dealTime;
+	public String getSimNumber() {
+		return simNumber;
 	}
 	
-	public void setDealTime(Date dealTime) {
-		this.dealTime = dealTime;
+	public void setSimNumber(String simNumber) {
+		this.simNumber = simNumber;
 	}
 	
-	public String getEndHourtime() {
-		return endHourtime;
-	}
-	
-	public void setEndHourtime(String endHourtime) {
-		this.endHourtime = endHourtime;
-	}
-	
-	public String getEndTime() {
-		return endTime;
-	}
-	
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-	
-	public byte getLimitValue() {
-		return limitValue;
-	}
-	
-	public void setLimitValue(byte limitValue) {
-		this.limitValue = limitValue;
-	}
-	
-	public byte getParamDeal() {
-		return paramDeal;
-	}
-	
-	public void setParamDeal(byte paramDeal) {
-		this.paramDeal = paramDeal;
-	}
-	
-	public byte getParamType() {
+	public Integer getParamType() {
 		return paramType;
 	}
 	
-	public void setParamType(byte paramType) {
+	public void setParamType(Integer paramType) {
 		this.paramType = paramType;
 	}
 	
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public Integer getParamValue() {
+		return paramValue;
 	}
 	
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setParamValue(Integer paramValue) {
+		this.paramValue = paramValue;
 	}
 	
-	public byte getReceiveResult() {
-		return receiveResult;
+	public String getParamData() {
+		return paramData;
 	}
 	
-	public void setReceiveResult(byte receiveResult) {
-		this.receiveResult = receiveResult;
+	public void setParamData(String paramData) {
+		this.paramData = paramData;
 	}
 	
-	public int getResendCount() {
-		return resendCount;
+	public Integer getDataId() {
+		return dataId;
 	}
 	
-	public void setResendCount(int resendCount) {
-		this.resendCount = resendCount;
+	public void setDataId(Integer dataId) {
+		this.dataId = dataId;
 	}
 	
-	public String getSendPerson() {
-		return sendPerson;
+	public String getDataName() {
+		return dataName;
 	}
 	
-	public void setSendPerson(String sendPerson) {
-		this.sendPerson = sendPerson;
+	public void setDataName(String dataName) {
+		this.dataName = dataName;
 	}
 	
-	public String getSendRemark() {
-		return sendRemark;
+	public Integer getLimitValue() {
+		return limitValue;
 	}
 	
-	public void setSendRemark(String sendRemark) {
-		this.sendRemark = sendRemark;
+	public void setLimitValue(Integer limitValue) {
+		this.limitValue = limitValue;
 	}
 	
-	public String getStartHourtime() {
-		return startHourtime;
+	public Date getStartDate() {
+		return startDate;
 	}
 	
-	public void setStartHourtime(String startHourtime) {
-		this.startHourtime = startHourtime;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 	
-	public String getStartTime() {
+	public Date getEndDate() {
+		return endDate;
+	}
+	
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	
+	public Time getStartTime() {
 		return startTime;
 	}
 	
-	public void setStartTime(String startTime) {
+	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
 	
-	public Date getStoreTime() {
-		return storeTime;
+	public Time getEndTime() {
+		return endTime;
 	}
 	
-	public void setStoreTime(Date storeTime) {
-		this.storeTime = storeTime;
+	public void setEndTime(Time endTime) {
+		this.endTime = endTime;
 	}
 	
-	public Integer getTypeId() {
-		return typeId;
+	public Integer getReceiveResult() {
+		return receiveResult;
 	}
 	
-	public void setTypeId(Integer typeId) {
-		this.typeId = typeId;
+	public void setReceiveResult(Integer receiveResult) {
+		this.receiveResult = receiveResult;
 	}
 	
-	public String getTypeName() {
-		return typeName;
+	public Integer getHandleResult() {
+		return handleResult;
 	}
 	
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+	public void setHandleResult(Integer handleResult) {
+		this.handleResult = handleResult;
 	}
 	
-	public String getTypeValue() {
-		return typeValue;
+	public Date getHandleTime() {
+		return handleTime;
 	}
 	
-	public void setTypeValue(String typeValue) {
-		this.typeValue = typeValue;
+	public void setHandleTime(Date handleTime) {
+		this.handleTime = handleTime;
 	}
-
+	
+	public Integer getResendCount() {
+		return resendCount;
+	}
+	
+	public void setResendCount(Integer resendCount) {
+		this.resendCount = resendCount;
+	}
+	
+	public Date getCreateTime() {
+		return createTime;
+	}
+	
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	
+	public String getSendUser() {
+		return sendUser;
+	}
+	
+	public void setSendUser(String sendUser) {
+		this.sendUser = sendUser;
+	}
+	
+	public String getRemark() {
+		return remark;
+	}
+	
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 }

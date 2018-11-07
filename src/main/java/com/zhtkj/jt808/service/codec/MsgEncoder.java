@@ -165,9 +165,9 @@ public class MsgEncoder {
         byte[] serialbs = new byte[4];
         serialbs = DigitUtil.intTo4Byte(param.getParamId());
 		return ArrayUtil.concatAll(msgTypebs, serialbs, 
-				new byte[] {param.getParamDeal()}, 
-				new byte[] {param.getLimitValue()},
-				param.getTypeValue().getBytes("GBK"));
+				new byte[] {param.getParamValue().byteValue()}, 
+				new byte[] {param.getLimitValue().byteValue()},
+				param.getParamData().getBytes("GBK"));
 	}
 	
 	//编码参数消息体（围栏类型）
@@ -177,7 +177,7 @@ public class MsgEncoder {
         byte[] serialbs = new byte[4];
         serialbs = DigitUtil.intTo4Byte(param.getParamId());
         //将gps坐标点转成byte[]
-        String[] points = param.getTypeValue().split(";");
+        String[] points = param.getParamData().split(";");
         byte[] pointbs = new byte[points.length * 8];
         for (int i = 0; i < points.length; i++) {
             String[] point = points[i].split(",");
@@ -201,8 +201,8 @@ public class MsgEncoder {
             pointbs[i * 8 + 7] = bsy[3];
         }
 		return ArrayUtil.concatAll(msgTypebs, serialbs, 
-				new byte[] {param.getParamDeal()}, 
-				new byte[] {param.getLimitValue()},
+				new byte[] {param.getParamValue().byteValue()}, 
+				new byte[] {param.getLimitValue().byteValue()},
 				pointbs);
 	}
 }

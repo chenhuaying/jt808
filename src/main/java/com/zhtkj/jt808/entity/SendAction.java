@@ -7,6 +7,7 @@ public class SendAction {
 	private Integer actionId;
 	private Integer tenantId;
 	private String licNumber;
+	private String simNumber;
 	private Integer actionType;
 	private Integer actionValue;
 	private Integer receiveResult;
@@ -42,6 +43,14 @@ public class SendAction {
 		this.licNumber = licNumber;
 	}
 	
+	public String getSimNumber() {
+		return simNumber;
+	}
+
+	public void setSimNumber(String simNumber) {
+		this.simNumber = simNumber;
+	}
+
 	public Integer getActionType() {
 		return actionType;
 	}

@@ -63,7 +63,7 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 					}
 				}
 				//打包消息byte[]
-				byte[] msgbs = msgEncoder.encode4Msg(JT808Const.ACTION_HEAD_ID, action.getLicNumber(), bodybs);
+				byte[] msgbs = msgEncoder.encode4Msg(JT808Const.ACTION_HEAD_ID, action.getSimNumber(), bodybs);
 				Channel channel = sessionManager.getChannelByKey(action.getLicNumber());
 				if (channel != null && channel.isOpen()) {
 					//发送byte[]给终端并更新receive_result状态
@@ -118,8 +118,8 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 				} else if (paramType == 15) {
 					bodybs = msgEncoder.encode4DirectParamBody(JT808Const.PARAM_BODY_ID_NOTIFY, param);
 				}
-				byte[] msgbs = msgEncoder.encode4Msg(JT808Const.PARAM_HEAD_ID, param.getPhoneNumber(), bodybs);
-				Channel channel = sessionManager.getChannelByKey(param.getPhoneNumber());
+				byte[] msgbs = msgEncoder.encode4Msg(JT808Const.PARAM_HEAD_ID, param.getSimNumber(), bodybs);
+				Channel channel = sessionManager.getChannelByKey(param.getLicNumber());
 				if (channel != null && channel.isOpen()) {
 					//发送byte[]给终端并更新receive_result状态
 					super.send2Terminal(channel, msgbs);

@@ -8,16 +8,18 @@ public class Session {
 
 	private String id;
 	private Channel channel;
+	private String terminalPhone;
 	private DateTime lastCommunicateTime;
 	
 	public Session(String terminalPhone, Channel channel) {
 		this.id = channel.id().asLongText();
 		this.channel = channel;
+		this.terminalPhone = terminalPhone;
 	}
 
 	@Override
 	public String toString() {
-		return "Session [id=" + id + ", channel=" + channel + "]";
+		return "Session [id=" + id + ", terminalPhone=" + terminalPhone + ", channel=" + channel + "]";
 	}
 
 	
@@ -36,8 +38,15 @@ public class Session {
 	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
-
 	
+	public String getTerminalPhone() {
+		return terminalPhone;
+	}
+
+	public void setTerminalPhone(String terminalPhone) {
+		this.terminalPhone = terminalPhone;
+	}
+
 	public DateTime getLastCommunicateTime() {
 		return lastCommunicateTime;
 	}
