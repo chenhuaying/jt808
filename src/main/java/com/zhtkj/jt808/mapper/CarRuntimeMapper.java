@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.zhtkj.jt808.entity.CarRuntime;
+import com.zhtkj.jt808.entity.VehicleRun;
 import com.zhtkj.jt808.vo.req.LocationMsg.LocationInfo;
 
 public interface CarRuntimeMapper {
@@ -17,5 +17,5 @@ public interface CarRuntimeMapper {
 	
 	int setCarOfflineState(@Param(value = "idleTime") String idleTime);
 	
-	List<CarRuntime> findCarPassword(@Param(value = "terminalPhone") String terminalPhone);
+	List<VehicleRun> findPassword(@Param(value = "licNumber") String licNumber);
 }

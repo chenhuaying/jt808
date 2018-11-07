@@ -97,13 +97,13 @@
 		  and online_state = 1
 	</update>
 	
-	<select id="findCarPassword" resultType="com.zhtkj.jt808.entity.CarRuntime">
+	<select id="findPassword" resultType="com.zhtkj.jt808.entity.CarRuntime">
 		select 
-		  car_password carPassword
+		  password 
 	    from 
 	      zt_car_runtime 
 	    where 
-	      dev_phone = '${terminalPhone}'
+	      lic_number = '${licNumber}'
 	    limit 1
 	</select>
 </mapper>

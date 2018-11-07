@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.zhtkj.jt808.common.JT808Const;
-import com.zhtkj.jt808.entity.CarRuntime;
+import com.zhtkj.jt808.entity.VehicleRun;
 import com.zhtkj.jt808.entity.SendAction;
 import com.zhtkj.jt808.entity.SendParam;
 import com.zhtkj.jt808.mapper.CarRuntimeMapper;
@@ -54,10 +54,9 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 				} else if (actionType == 4) { //抓拍指令
 					bodybs = msgEncoder.encode4ImageActionBody(JT808Const.ACTION_BODY_ID_IMGACT, action);
 				} else if (actionType == 5) { //密码指令
-					List<CarRuntime> carRuntimes = carRuntimeMapper.findCarPassword(action.getLicNumber());
-					if (carRuntimes.size() > 0 && carRuntimes.get(0).getCarPassword() != null) {
-						bodybs = msgEncoder.encode4PasswordActionBody(
-								JT808Const.ACTION_BODY_ID_PASSWORD, action, carRuntimes.get(0).getCarPassword());
+					List<VehicleRun> carRuntimes = carRuntimeMapper.findPassword(action.getLicNumber());
+					if (carRuntimes.size() > 0 && carRuntimes.get(0).getPassword() != null) {
+						bodybs = msgEncoder.encode4PasswordActionBody(JT808Const.ACTION_BODY_ID_PASSWORD, action, carRuntimes.get(0).getPassword());
 					} else {
 						continue;
 					}
