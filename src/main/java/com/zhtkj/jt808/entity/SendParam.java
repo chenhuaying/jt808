@@ -2,7 +2,7 @@ package com.zhtkj.jt808.entity;
 
 import java.util.Date;
 
-public class DataParam {
+public class SendParam {
 	
 	private int paramId;
 	private String carPass;

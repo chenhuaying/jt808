@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.zhtkj.jt808.entity.DataAction;
+import com.zhtkj.jt808.entity.SendAction;
 import com.zhtkj.jt808.vo.PackageData.MsgBody;
 
 public interface DataActionMapper {
@@ -14,5 +14,5 @@ public interface DataActionMapper {
 	int updateActionReceiveResult(@Param(value = "actionId") Integer actionId,
 			                      @Param(value = "receiveResult") Integer receiveResult);
 	
-	List<DataAction> findSendActionData();
+	List<SendAction> findSendActionData();
 }

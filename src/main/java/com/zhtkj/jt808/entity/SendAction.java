@@ -2,7 +2,7 @@ package com.zhtkj.jt808.entity;
 
 import java.util.Date;
 
-public class DataAction {
+public class SendAction {
 
 	private int actionId;
 	private int actionType;

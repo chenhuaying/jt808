@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.zhtkj.jt808.common.JT808Const;
 import com.zhtkj.jt808.entity.DeviceConfig;
-import com.zhtkj.jt808.entity.DataAction;
-import com.zhtkj.jt808.entity.DataParam;
+import com.zhtkj.jt808.entity.SendAction;
+import com.zhtkj.jt808.entity.SendParam;
 import com.zhtkj.jt808.util.ArrayUtil;
 import com.zhtkj.jt808.util.DigitUtil;
 import com.zhtkj.jt808.vo.PackageData;
@@ -130,7 +130,7 @@ public class MsgEncoder {
 	}
 	
 	//编码通用的要下发的指令消息体
-	public byte[] encode4CommonActionBody(int msgType, DataAction action) {
+	public byte[] encode4CommonActionBody(int msgType, SendAction action) {
         byte[] msgTypebs = new byte[2];
         msgTypebs = DigitUtil.shortTo2Byte((short) msgType);
         byte[] serialbs = new byte[4];
@@ -140,7 +140,7 @@ public class MsgEncoder {
 	}
 	
 	//编码抓拍指令消息体
-	public byte[] encode4ImageActionBody(int msgType, DataAction action) {
+	public byte[] encode4ImageActionBody(int msgType, SendAction action) {
         byte[] msgTypebs = new byte[2];
         msgTypebs = DigitUtil.shortTo2Byte((short) msgType);
         byte[] serialbs = new byte[4];
@@ -150,7 +150,7 @@ public class MsgEncoder {
 	}
 
 	//编码密码指令消息体
-	public byte[] encode4PasswordActionBody(int msgType, DataAction action, String carPassword) {
+	public byte[] encode4PasswordActionBody(int msgType, SendAction action, String carPassword) {
         byte[] msgTypebs = new byte[2];
         msgTypebs = DigitUtil.shortTo2Byte((short) msgType);
         byte[] serialbs = new byte[4];
@@ -159,7 +159,7 @@ public class MsgEncoder {
 	}
 	
 	//编码参数消息体（直接取值）
-	public byte[] encode4DirectParamBody(int msgType, DataParam param) throws UnsupportedEncodingException {
+	public byte[] encode4DirectParamBody(int msgType, SendParam param) throws UnsupportedEncodingException {
         byte[] msgTypebs = new byte[2];
         msgTypebs = DigitUtil.shortTo2Byte((short) msgType);
         byte[] serialbs = new byte[4];
@@ -171,7 +171,7 @@ public class MsgEncoder {
 	}
 	
 	//编码参数消息体（围栏类型）
-	public byte[] encode4FenceParamBody(int msgType, DataParam param) throws UnsupportedEncodingException {
+	public byte[] encode4FenceParamBody(int msgType, SendParam param) throws UnsupportedEncodingException {
         byte[] msgTypebs = new byte[2];
         msgTypebs = DigitUtil.shortTo2Byte((short) msgType);
         byte[] serialbs = new byte[4];

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.zhtkj.jt808.common.JT808Const;
 import com.zhtkj.jt808.entity.CarRuntime;
-import com.zhtkj.jt808.entity.DataAction;
-import com.zhtkj.jt808.entity.DataParam;
+import com.zhtkj.jt808.entity.SendAction;
+import com.zhtkj.jt808.entity.SendParam;
 import com.zhtkj.jt808.mapper.CarRuntimeMapper;
 import com.zhtkj.jt808.mapper.DataActionMapper;
 import com.zhtkj.jt808.mapper.DataParamMapper;
@@ -35,8 +35,8 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
     
     //处理要发送给终端的指令
     public void processSendActionMsg() throws Exception {
-    	List<DataAction> actions = dataActionMapper.findSendActionData();
-    	for (DataAction action: actions) {
+    	List<SendAction> actions = dataActionMapper.findSendActionData();
+    	for (SendAction action: actions) {
     		try {
     			//根据不同的指令类型打包消息体byte[]
 				int actionType = action.getActionType();
@@ -81,8 +81,8 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
     
     //处理要发送给终端的参数
     public void processSendParamMsg() throws Exception {
-    	List<DataParam> params = dataParamMapper.findSendParamData();
-    	for (DataParam param: params) {
+    	List<SendParam> params = dataParamMapper.findSendParamData();
+    	for (SendParam param: params) {
     		try {
 				int paramType = param.getParamType();
 				byte[] bodybs = null;

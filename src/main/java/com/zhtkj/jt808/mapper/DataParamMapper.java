@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.zhtkj.jt808.entity.DataParam;
+import com.zhtkj.jt808.entity.SendParam;
 import com.zhtkj.jt808.vo.PackageData.MsgBody;
 
 public interface DataParamMapper {
@@ -14,5 +14,5 @@ public interface DataParamMapper {
 	int updateParamReceiveResult(@Param(value = "paramId") Integer paramId,
             @Param(value = "receiveResult") Integer receiveResult);
 	
-	List<DataParam> findSendParamData();
+	List<SendParam> findSendParamData();
 }
