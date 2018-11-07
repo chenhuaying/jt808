@@ -54,7 +54,7 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 				} else if (actionType == 4) { //抓拍指令
 					bodybs = msgEncoder.encode4ImageActionBody(JT808Const.ACTION_BODY_ID_IMGACT, action);
 				} else if (actionType == 5) { //密码指令
-					List<CarRuntime> carRuntimes = carRuntimeMapper.findCarPassword(action.getPhoneNumber());
+					List<CarRuntime> carRuntimes = carRuntimeMapper.findCarPassword(action.getLicNumber());
 					if (carRuntimes.size() > 0 && carRuntimes.get(0).getCarPassword() != null) {
 						bodybs = msgEncoder.encode4PasswordActionBody(
 								JT808Const.ACTION_BODY_ID_PASSWORD, action, carRuntimes.get(0).getCarPassword());
@@ -63,8 +63,8 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 					}
 				}
 				//打包消息byte[]
-				byte[] msgbs = msgEncoder.encode4Msg(JT808Const.ACTION_HEAD_ID, action.getPhoneNumber(), bodybs);
-				Channel channel = sessionManager.getChannelByKey(action.getPhoneNumber());
+				byte[] msgbs = msgEncoder.encode4Msg(JT808Const.ACTION_HEAD_ID, action.getLicNumber(), bodybs);
+				Channel channel = sessionManager.getChannelByKey(action.getLicNumber());
 				if (channel != null && channel.isOpen()) {
 					//发送byte[]给终端并更新receive_result状态
 					send2Terminal(channel, msgbs);

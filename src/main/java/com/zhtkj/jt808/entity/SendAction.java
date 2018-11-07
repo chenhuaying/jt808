@@ -4,114 +4,114 @@ import java.util.Date;
 
 public class SendAction {
 
-	private int actionId;
-	private int actionType;
-	private int actionValue;
-	private String carPass;
-	private Date storeTime;
-	private byte dealResult;
-	private Date dealTime;
-	private String phoneNumber;
-	private byte receiveResult;
-	private int resendCount;
-	private String sendPerson;
-	private String sendRemark;
+	private Integer actionId;
+	private Integer tenantId;
+	private String licNumber;
+	private Integer actionType;
+	private Integer actionValue;
+	private Integer receiveResult;
+	private Integer handleResult;
+	private Date handleTime;
+	private Integer resendCount;
+	private Date createTime;
+	private String sendUser;
+	private String remark;
 	private String imgPath;
 	
-	public int getActionId() {
+	public Integer getActionId() {
 		return actionId;
 	}
 	
-	public void setActionId(int actionId) {
+	public void setActionId(Integer actionId) {
 		this.actionId = actionId;
 	}
 	
-	public int getActionType() {
+	public Integer getTenantId() {
+		return tenantId;
+	}
+	
+	public void setTenantId(Integer tenantId) {
+		this.tenantId = tenantId;
+	}
+	
+	public String getLicNumber() {
+		return licNumber;
+	}
+	
+	public void setLicNumber(String licNumber) {
+		this.licNumber = licNumber;
+	}
+	
+	public Integer getActionType() {
 		return actionType;
 	}
 	
-	public void setActionType(int actionType) {
+	public void setActionType(Integer actionType) {
 		this.actionType = actionType;
 	}
 	
-	public int getActionValue() {
+	public Integer getActionValue() {
 		return actionValue;
 	}
 	
-	public void setActionValue(int actionValue) {
+	public void setActionValue(Integer actionValue) {
 		this.actionValue = actionValue;
 	}
 	
-	public String getCarPass() {
-		return carPass;
-	}
-	
-	public void setCarPass(String carPass) {
-		this.carPass = carPass;
-	}
-	
-	public Date getStoreTime() {
-		return storeTime;
-	}
-	
-	public void setStoreTime(Date storeTime) {
-		this.storeTime = storeTime;
-	}
-	
-	public byte getDealResult() {
-		return dealResult;
-	}
-	
-	public void setDealResult(byte dealResult) {
-		this.dealResult = dealResult;
-	}
-	
-	public Date getDealTime() {
-		return dealTime;
-	}
-	
-	public void setDealTime(Date dealTime) {
-		this.dealTime = dealTime;
-	}
-	
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-	
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-	
-	public byte getReceiveResult() {
+	public Integer getReceiveResult() {
 		return receiveResult;
 	}
 	
-	public void setReceiveResult(byte receiveResult) {
+	public void setReceiveResult(Integer receiveResult) {
 		this.receiveResult = receiveResult;
 	}
 	
-	public int getResendCount() {
+	public Integer getHandleResult() {
+		return handleResult;
+	}
+	
+	public void setHandleResult(Integer handleResult) {
+		this.handleResult = handleResult;
+	}
+	
+	public Date getHandleTime() {
+		return handleTime;
+	}
+	
+	public void setHandleTime(Date handleTime) {
+		this.handleTime = handleTime;
+	}
+	
+	public Integer getResendCount() {
 		return resendCount;
 	}
 	
-	public void setResendCount(int resendCount) {
+	public void setResendCount(Integer resendCount) {
 		this.resendCount = resendCount;
 	}
 	
-	public String getSendPerson() {
-		return sendPerson;
+	public Date getCreateTime() {
+		return createTime;
 	}
 	
-	public void setSendPerson(String sendPerson) {
-		this.sendPerson = sendPerson;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 	
-	public String getSendRemark() {
-		return sendRemark;
+	public String getSendUser() {
+		return sendUser;
 	}
 	
-	public void setSendRemark(String sendRemark) {
-		this.sendRemark = sendRemark;
+	public void setSendUser(String sendUser) {
+		this.sendUser = sendUser;
+	}
+	
+	public String getRemark() {
+		return remark;
+	}
+	
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 	public String getImgPath() {

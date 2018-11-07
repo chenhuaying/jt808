@@ -135,7 +135,7 @@ public class MsgEncoder {
         msgTypebs = DigitUtil.shortTo2Byte((short) msgType);
         byte[] serialbs = new byte[4];
         serialbs = DigitUtil.intTo4Byte(action.getActionId());
-        byte[] valuebs = new byte[] {(byte)action.getActionValue()};
+        byte[] valuebs = new byte[] {action.getActionValue().byteValue()};
 		return ArrayUtil.concatAll(msgTypebs, serialbs, valuebs);
 	}
 	
