@@ -23,7 +23,7 @@
 		  and online_state = 1
 	</update>
 	
-	<select id="findPassword" resultType="com.zhtkj.jt808.entity.CarRuntime">
+	<select id="findPassword" resultType="com.zhtkj.jt808.entity.VehicleRun">
 		select 
 		  password 
 	    from 
