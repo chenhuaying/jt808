@@ -44,23 +44,4 @@
 		  mac = '${configInfo.mac}' 
 	</update>
 
-	<select id="selectConfigByKey" resultType="com.zhtkj.jt808.entity.Config">
-		select
-		  mac,
-		  car_number carNumber,
-		  dev_phone devPhone,
-		  version,
-		  version_sys versionSys,
-		  ecu_type ecuType,
-		  car_type carType,
-		  update_tag updateTag,
-		  update_cfg_tag updateCfgTag,
-		  report_time reportTime
-		from
-		  zt_config
-		where
-		  mac = '${mac}'
-		limit 1
-	</select>
-
 </mapper>

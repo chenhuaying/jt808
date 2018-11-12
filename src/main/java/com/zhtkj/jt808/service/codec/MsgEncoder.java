@@ -90,7 +90,7 @@ public class MsgEncoder {
 	}
 	
 	//生成登录响应包
-	public byte[] encode4LoginResp(PackageData packageData, RespMsgBody respMsgBody) {
+	public byte[] encode4AuthResp(PackageData packageData, RespMsgBody respMsgBody) {
 		byte[] bodybs = this.encode4CommonRespBody(JT808Const.TASK_BODY_ID_LOGIN, respMsgBody.getReplyResult());
 		byte[] msgbs = this.encode4Msg(JT808Const.TASK_HEAD_ID, packageData.getMsgHead().getTerminalPhone(), bodybs);
 		return msgbs;
@@ -123,7 +123,7 @@ public class MsgEncoder {
         byte[] headserialbs = DigitUtil.intTo4ByteRev(packageData.getMsgHead().getHeadSerial());
 		byte[] macbs = config.getMac().getBytes();
 		byte[] configbs = (config.getLicNumber() + "," + config.getSimNumber() + "," 
-				+ config.getVersion() + "," + config.getEcuType() + "," + config.getCarType()).getBytes();
+				+ config.getVersion() + "," + config.getEcuType() + "," + config.getVehicleType()).getBytes();
 		byte[] bodybs = ArrayUtil.concatAll(bodyidbs, headserialbs, macbs, configbs);
 		byte[] msgbs = this.encode4Msg(JT808Const.TASK_HEAD_ID, packageData.getMsgHead().getTerminalPhone(), bodybs);
 		return msgbs;
@@ -166,8 +166,8 @@ public class MsgEncoder {
         serialbs = DigitUtil.intTo4Byte(param.getParamId());
 		return ArrayUtil.concatAll(msgTypebs, serialbs, 
 				new byte[] {param.getParamValue().byteValue()}, 
-				new byte[] {param.getLimitValue().byteValue()},
-				param.getParamData().getBytes("GBK"));
+				new byte[] {param.getDataLimit().byteValue()},
+				param.getDataValue().getBytes("GBK"));
 	}
 	
 	//编码参数消息体（围栏类型）
@@ -177,7 +177,7 @@ public class MsgEncoder {
         byte[] serialbs = new byte[4];
         serialbs = DigitUtil.intTo4Byte(param.getParamId());
         //将gps坐标点转成byte[]
-        String[] points = param.getParamData().split(";");
+        String[] points = param.getDataValue().split(";");
         byte[] pointbs = new byte[points.length * 8];
         for (int i = 0; i < points.length; i++) {
             String[] point = points[i].split(",");
@@ -202,7 +202,7 @@ public class MsgEncoder {
         }
 		return ArrayUtil.concatAll(msgTypebs, serialbs, 
 				new byte[] {param.getParamValue().byteValue()}, 
-				new byte[] {param.getLimitValue().byteValue()},
+				new byte[] {param.getDataLimit().byteValue()},
 				pointbs);
 	}
 }

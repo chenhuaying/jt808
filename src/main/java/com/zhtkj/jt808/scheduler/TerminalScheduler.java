@@ -18,7 +18,7 @@ import io.netty.channel.Channel;
 public class TerminalScheduler {
 
 	@Autowired
-	private VehicleRunMapper carRuntimeMapper;
+	private VehicleRunMapper vehicleRunMapper;
 	
 	/**
 	 * @Description: 移除没有持续上报数据的终端session, 并更改车辆实时表的车辆状态为离线状态   
@@ -40,7 +40,7 @@ public class TerminalScheduler {
 				iterator.remove();
 			}
 		}
-		carRuntimeMapper.setCarOfflineState(idleTime.toString("yyyy-MM-dd HH:mm:ss"));
+		vehicleRunMapper.setVehicleOffline(idleTime.toString("yyyy-MM-dd HH:mm:ss"));
 	}
 	
 }

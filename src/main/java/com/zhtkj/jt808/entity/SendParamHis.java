@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
-@TableName("zt_send_param")
-public class SendParam {
+@TableName("zt_send_param_his")
+public class SendParamHis {
 	
-	@TableId(type = IdType.INPUT)
+	@TableId(type = IdType.AUTO)
 	private Integer paramId;
 	private Integer tenantId;
 	private String licNumber;

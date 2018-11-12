@@ -4,24 +4,28 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.zhtkj.jt808.common.JT808Const;
 import com.zhtkj.jt808.entity.DeviceConfig;
+import com.zhtkj.jt808.entity.SendAction;
+import com.zhtkj.jt808.entity.SendActionHis;
+import com.zhtkj.jt808.entity.SendParam;
+import com.zhtkj.jt808.entity.SendParamHis;
 import com.zhtkj.jt808.entity.VehicleRun;
+import com.zhtkj.jt808.mapper.DeviceConfigMapper;
 import com.zhtkj.jt808.mapper.EventMapper;
+import com.zhtkj.jt808.mapper.SendActionHisMapper;
+import com.zhtkj.jt808.mapper.SendActionMapper;
+import com.zhtkj.jt808.mapper.SendParamHisMapper;
+import com.zhtkj.jt808.mapper.SendParamMapper;
 import com.zhtkj.jt808.mapper.VehicleHisMapper;
 import com.zhtkj.jt808.mapper.VehicleRunMapper;
-import com.zhtkj.jt808.mapper.DeviceConfigMapper;
-import com.zhtkj.jt808.mapper.SendActionMapper;
-import com.zhtkj.jt808.mapper.SendParamMapper;
 import com.zhtkj.jt808.service.codec.MsgEncoder;
 import com.zhtkj.jt808.util.CarEventUtil;
 import com.zhtkj.jt808.util.CarHistoryUtil;
@@ -29,10 +33,12 @@ import com.zhtkj.jt808.util.DigitUtil;
 import com.zhtkj.jt808.vo.PackageData;
 import com.zhtkj.jt808.vo.PackageData.MsgBody;
 import com.zhtkj.jt808.vo.Session;
+import com.zhtkj.jt808.vo.req.AuthMsg;
 import com.zhtkj.jt808.vo.req.EventMsg;
 import com.zhtkj.jt808.vo.req.EventMsg.EventInfo;
 import com.zhtkj.jt808.vo.req.LocationMsg;
 import com.zhtkj.jt808.vo.req.LocationMsg.LocationInfo;
+import com.zhtkj.jt808.vo.req.SelfCheckMsg;
 import com.zhtkj.jt808.vo.req.VersionMsg;
 import com.zhtkj.jt808.vo.req.VersionMsg.VersionInfo;
 import com.zhtkj.jt808.vo.resp.RespMsgBody;
@@ -51,32 +57,36 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     private VehicleHisMapper vehicleHisMapper;
 	
 	@Autowired
-    private EventMapper carEventMapper;
+    private EventMapper eventMapper;
     
 	@Autowired
-    private SendActionMapper dataActionMapper;
+    private SendActionMapper sendActionMapper;
     
 	@Autowired
-    private SendParamMapper dataParamMapper;
+    private SendActionHisMapper sendActionHisMapper;
+	
+	@Autowired
+    private SendParamMapper sendParamMapper;
     
+	@Autowired
+    private SendParamHisMapper sendParamHisMapper;
+	
 	@Autowired
     private DeviceConfigMapper deviceConfigMapper;
 	
-    //处理终端登录业务
-    public void processLoginMsg(PackageData packageData) throws Exception {
-        String terminalPhone = packageData.getMsgHead().getTerminalPhone();
-        Session session = new Session(terminalPhone, packageData.getChannel());
+    //处理登录业务
+    public void processAuthMsg(AuthMsg authMsg) throws Exception {
+        Session session = new Session(authMsg.getMsgHead().getTerminalPhone(), authMsg.getChannel());
         session.setLastCommunicateTime(new DateTime());
-        sessionManager.addSession(terminalPhone, session);
-        vehicleRunMapper.setCarOnlineState(terminalPhone);
-        //发送登录响应数据包给终端，暂时是不用验证就可以登录
-        byte[] bs = this.msgEncoder.encode4LoginResp(packageData, new RespMsgBody((byte) 1));
-        super.send2Terminal(packageData.getChannel(), bs);
+        sessionManager.addSession(authMsg.getAuthInfo().getLicNumber(), session);
+        //发送登录响应数据包给终端，不用验证就可以登录
+        byte[] bs = this.msgEncoder.encode4AuthResp(authMsg, new RespMsgBody((byte) 1));
+        super.send2Terminal(authMsg.getChannel(), bs);
     }
 
     //处理基本位置信息业务
-    public void processLocationMsg(LocationMsg msg) throws Exception {
-    	LocationInfo locInfo = msg.getLocationInfo();
+    public void processLocationMsg(LocationMsg locationMsg) throws Exception {
+    	LocationInfo locInfo = locationMsg.getLocationInfo();
     	VehicleRun vehRun = new VehicleRun();
     	vehRun.setLicNumber(locInfo.getLicNumber());
     	vehRun.setTenantId(430121);
@@ -89,29 +99,28 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     	vehRun.setBoxClose((int)locInfo.getBoxClose());
     	vehRun.setBoxEmpty((int)locInfo.getBoxEmpty());
     	vehRun.setBoxUp((int)locInfo.getBoxUp());
-    	vehRun.setPassword("zt12345678");
     	vehRun.setWeigui((int)locInfo.getWeigui());
     	vehRun.setState(locInfo.getState());
     	vehRun.setDriverId(locInfo.getDriverId());
     	vehRun.setReportTime(DateTime.parse(locInfo.getReportTime(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate());
     	vehRun.setOnlineState(1);
-    	vehRun.setOnlineTime(new Date());
     	if (vehicleRunMapper.updateById(vehRun) == 0) {
-    		vehRun.setPassword(null);
+    		vehRun.setOnlineTime(new Date());
+    		vehRun.setPassword("zt12345678");
     		vehicleRunMapper.insert(vehRun);
     	}
     	//判断是否需要写入位置信息到数据库
     	if (CarHistoryUtil.isPersistent(locInfo)) {
-    		vehicleHisMapper.insertCarHistory(DateTime.now().toString("M"), vehRun);
+    		vehicleHisMapper.insertVehicleHis(DateTime.now().toString("M"), vehRun);
     	}
-    	Session session = sessionManager.findSessionByKey(msg.getMsgHead().getTerminalPhone());
+    	Session session = sessionManager.findSessionByKey(vehRun.getLicNumber());
     	//如果session等于null则证明终端没有先发送登录包过来，需要主动断开该连接
     	if (session == null) {
-    		msg.getChannel().close();
+    		locationMsg.getChannel().close();
     	} else {
     		session.setLastCommunicateTime(DateTime.now());
-            byte[] bs = this.msgEncoder.encode4LocationResp(msg, new RespMsgBody((byte) 1));
-            super.send2Terminal(msg.getChannel(), bs);
+            byte[] bs = this.msgEncoder.encode4LocationResp(locationMsg, new RespMsgBody((byte) 1));
+            super.send2Terminal(locationMsg.getChannel(), bs);
     	}
     }
     
@@ -120,23 +129,35 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     	EventInfo eventInfo = msg.getEventInfo();
     	//判断是否需要写入事件到数据库
     	if (CarEventUtil.isPersistent(eventInfo)) {
-    		carEventMapper.insertCarEvent(DateTime.now().toString("M"), eventInfo, eventInfo.getLocationInfo());
+    		eventMapper.insertCarEvent(DateTime.now().toString("M"), eventInfo, eventInfo.getLocationInfo());
     	}
     }
     
     //处理自检信息业务
-    public void processSelfCheckMsg(PackageData packageData) {
-    	vehicleRunMapper.setCarOnlineState(packageData.getMsgHead().getTerminalPhone());
+    public void processSelfCheckMsg(SelfCheckMsg selfCheckMsg) {
+    	//设置车辆为上线状态
+    	vehicleRunMapper.setVehicleOnline(selfCheckMsg.getSelfCheckInfo().getLicNumber());
     }
     
     //处理终端版本信息业务
     public void processVersionMsg(VersionMsg versionMsg) throws InterruptedException {
     	VersionInfo versionInfo = versionMsg.getVersionInfo();
-    	if (deviceConfigMapper.updateDeviceConfig(versionInfo) == 0) {
-    		deviceConfigMapper.insertDeviceConfig(versionInfo);
+    	DeviceConfig deviceConfig = new DeviceConfig();
+    	deviceConfig.setMac(versionInfo.getMac());
+    	deviceConfig.setLicNumber(versionInfo.getLicNumber());
+    	deviceConfig.setSimNumber(versionInfo.getSimNumber());
+    	deviceConfig.setEcuType(versionInfo.getEcuType());
+    	deviceConfig.setVehicleType(versionInfo.getCarType());
+    	deviceConfig.setReportTime(new Date());
+    	if (deviceConfigMapper.updateById(deviceConfig) == 0) {
+    		deviceConfig.setVersion(versionInfo.getVersion());
+    		deviceConfig.setVersionSys(versionInfo.getVersion());
+    		deviceConfig.setUpdateTag(0);
+    		deviceConfig.setUpdateCfgTag(0);
+    		deviceConfigMapper.insert(deviceConfig);
     	}
     	int replyResult = 3;
-    	DeviceConfig config = deviceConfigMapper.selectDeviceConfigByKey(versionInfo.getMac()).get(0);
+    	DeviceConfig config = deviceConfigMapper.selectById(versionInfo.getMac());
     	String[] versions = config.getVersion().replace("V", "").split("\\.");
     	String[] sysVersions = config.getVersionSys().replace("V", "").split("\\.");
     	int updateTag = config.getUpdateTag();
@@ -176,12 +197,11 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
 		byte[] bodybs = packageData.getMsgBody().getBodyBytes();
     	byte[] macbs = DigitUtil.sliceBytes(bodybs, 12, 28);
     	String mac = new String(macbs);
-    	List<DeviceConfig> configs = deviceConfigMapper.selectDeviceConfigByKey(mac);
-    	if (configs.size() > 0) {
-    		DeviceConfig config = configs.get(0);
+    	DeviceConfig deviceConfig = deviceConfigMapper.selectById(mac);
+    	if (deviceConfig != null) {
     		//车辆信息中车牌号包含4412或者终端手机号码是17775754123时，不下发配置文件
-			if (!config.getLicNumber().contains("4412") && !config.getSimNumber().equals("17775754123")) {
-	        	byte[] bs = msgEncoder.encode4ConfigResp(packageData, config);
+			if (!deviceConfig.getLicNumber().contains("4412") && !deviceConfig.getSimNumber().equals("17775754123")) {
+	        	byte[] bs = msgEncoder.encode4ConfigResp(packageData, deviceConfig);
 	        	super.send2Terminal(packageData.getChannel(), bs);
 			}
     	}
@@ -189,7 +209,21 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     
     //处理指令业务，这里是处理终端返回的指令执行响应,不是下发指令
     public void processActionMsg(PackageData packageData) {
-    	dataActionMapper.updateActionDealResult(packageData.getMsgBody());
+    	MsgBody msgBody = packageData.getMsgBody();
+    	SendAction sa = new SendAction();
+    	sa.setActionId(msgBody.getBodySerial());
+    	sa.setHandleResult(msgBody.getResult());
+    	sa.setHandleTime(new Date());
+    	if (sa.getHandleResult() == 1) {
+    		sendActionMapper.deleteById(sa.getActionId());
+    	} else {
+    		sendActionMapper.updateById(sa);
+    	}
+    	SendActionHis sah = new SendActionHis();
+    	sah.setActionId(msgBody.getBodySerial());
+    	sah.setHandleResult(msgBody.getResult());
+    	sah.setHandleTime(new Date());
+    	sendActionHisMapper.updateById(sah);
     }
     
     //处理抓拍业务
@@ -217,7 +251,21 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     
     //处理参数业务，这里是处理终端返回的参数执行响应
     public void processParamMsg(PackageData packageData) {
-    	dataParamMapper.updateParamResult(packageData.getMsgBody());
+    	MsgBody msgBody = packageData.getMsgBody();
+    	SendParam sp = new SendParam();
+    	sp.setParamId(msgBody.getBodySerial());
+    	sp.setHandleResult(msgBody.getResult());
+    	sp.setHandleTime(new Date());
+    	if (sp.getHandleResult() == 1) {
+    		sendParamMapper.deleteById(sp.getParamId());
+    	} else {
+    		sendParamMapper.updateById(sp);
+    	}
+    	SendParamHis sph = new SendParamHis();
+    	sph.setParamId(msgBody.getBodySerial());
+    	sph.setHandleResult(msgBody.getResult());
+    	sph.setHandleTime(new Date());
+    	sendParamHisMapper.updateById(sph);
     }
     
 }

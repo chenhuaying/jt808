@@ -2,13 +2,19 @@ package com.zhtkj.jt808.entity;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
+@TableName("zt_device_config")
 public class DeviceConfig {
 
+	@TableId(type = IdType.INPUT)
 	private String mac;
 	private String licNumber;
 	private String simNumber;
 	private String ecuType;
-	private String carType;
+	private String vehicleType;
 	private String version;
 	private String versionSys;
 	private Integer updateTag;
@@ -39,11 +45,11 @@ public class DeviceConfig {
 	public void setEcuType(String ecuType) {
 		this.ecuType = ecuType;
 	}
-	public String getCarType() {
-		return carType;
+	public String getVehicleType() {
+		return vehicleType;
 	}
-	public void setCarType(String carType) {
-		this.carType = carType;
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
 	}
 	public String getVersion() {
 		return version;

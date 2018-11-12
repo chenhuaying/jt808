@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhtkj.jt808.mapper.SendParamMapper">
+	
+	<select id="findSendParam" resultType="com.zhtkj.jt808.entity.SendParam">
+		select 
+		  param_id paramId,
+	      lic_number licNumber,
+	      sim_number simNumber,
+	      param_type paramType,
+	      param_value paramValue,
+	      data_limit dataLimit,
+	      data_value dataValue
+	    from 
+	      zt_send_param 
+	    where 
+	      receive_result = 0 
+	</select>
+	
+</mapper>

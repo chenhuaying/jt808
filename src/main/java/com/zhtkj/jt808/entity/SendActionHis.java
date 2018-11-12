@@ -6,18 +6,16 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
-@TableName("zt_send_param")
-public class SendParam {
+@TableName("zt_send_action_his")
+public class SendActionHis {
 	
-	@TableId(type = IdType.INPUT)
-	private Integer paramId;
+	@TableId(type = IdType.AUTO)
+	private Integer actionId;
 	private Integer tenantId;
 	private String licNumber;
 	private String simNumber;
-	private Integer paramType;
-	private Integer paramValue;
-	private Integer dataLimit;
-	private String dataValue;
+	private Integer actionType;
+	private Integer actionValue;
 	private Integer receiveResult;
 	private Integer handleResult;
 	private Date handleTime;
@@ -25,13 +23,14 @@ public class SendParam {
 	private Date createTime;
 	private String sendUser;
 	private String remark;
+	private String imgPath;
 	
-	public Integer getParamId() {
-		return paramId;
+	public Integer getActionId() {
+		return actionId;
 	}
 	
-	public void setParamId(Integer paramId) {
-		this.paramId = paramId;
+	public void setActionId(Integer actionId) {
+		this.actionId = actionId;
 	}
 	
 	public Integer getTenantId() {
@@ -53,41 +52,25 @@ public class SendParam {
 	public String getSimNumber() {
 		return simNumber;
 	}
-	
+
 	public void setSimNumber(String simNumber) {
 		this.simNumber = simNumber;
 	}
-	
-	public Integer getParamType() {
-		return paramType;
+
+	public Integer getActionType() {
+		return actionType;
 	}
 	
-	public void setParamType(Integer paramType) {
-		this.paramType = paramType;
+	public void setActionType(Integer actionType) {
+		this.actionType = actionType;
 	}
 	
-	public Integer getParamValue() {
-		return paramValue;
+	public Integer getActionValue() {
+		return actionValue;
 	}
 	
-	public void setParamValue(Integer paramValue) {
-		this.paramValue = paramValue;
-	}
-	
-	public Integer getDataLimit() {
-		return dataLimit;
-	}
-	
-	public void setDataLimit(Integer dataLimit) {
-		this.dataLimit = dataLimit;
-	}
-	
-	public String getDataValue() {
-		return dataValue;
-	}
-	
-	public void setDataValue(String dataValue) {
-		this.dataValue = dataValue;
+	public void setActionValue(Integer actionValue) {
+		this.actionValue = actionValue;
 	}
 	
 	public Integer getReceiveResult() {
@@ -144,6 +127,14 @@ public class SendParam {
 	
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	
+	public String getImgPath() {
+		return imgPath;
+	}
+	
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
 	}
 	
 }

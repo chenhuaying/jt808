@@ -7,12 +7,16 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.zhtkj.jt808.common.JT808Const;
-import com.zhtkj.jt808.entity.VehicleRun;
 import com.zhtkj.jt808.entity.SendAction;
+import com.zhtkj.jt808.entity.SendActionHis;
 import com.zhtkj.jt808.entity.SendParam;
-import com.zhtkj.jt808.mapper.VehicleRunMapper;
+import com.zhtkj.jt808.entity.SendParamHis;
+import com.zhtkj.jt808.entity.VehicleRun;
+import com.zhtkj.jt808.mapper.SendActionHisMapper;
 import com.zhtkj.jt808.mapper.SendActionMapper;
+import com.zhtkj.jt808.mapper.SendParamHisMapper;
 import com.zhtkj.jt808.mapper.SendParamMapper;
+import com.zhtkj.jt808.mapper.VehicleRunMapper;
 import com.zhtkj.jt808.service.codec.MsgEncoder;
 
 import io.netty.channel.Channel;
@@ -28,15 +32,25 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 	private VehicleRunMapper carRuntimeMapper;
 	
 	@Autowired
-	private SendActionMapper dataActionMapper;
+	private SendActionMapper sendActionMapper;
 	
 	@Autowired
-    private SendParamMapper dataParamMapper;
+	private SendActionHisMapper sendActionHisMapper;
+	
+	@Autowired
+    private SendParamMapper sendParamMapper;
     
+	@Autowired
+    private SendParamHisMapper sendParamHisMapper;
+	
     //处理要发送给终端的指令
     public void processSendActionMsg() throws Exception {
-    	List<SendAction> actions = dataActionMapper.findSendActionData();
+    	List<SendAction> actions = sendActionMapper.findSendAction();
     	for (SendAction action: actions) {
+    		SendAction saUpdate = new SendAction();
+    		SendActionHis sahUpdate = new SendActionHis();
+    		saUpdate.setActionId(action.getActionId());
+    		sahUpdate.setActionId(action.getActionId());
     		try {
     			//根据不同的指令类型打包消息体byte[]
 				int actionType = action.getActionType();
@@ -67,12 +81,17 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 				if (channel != null && channel.isOpen()) {
 					//发送byte[]给终端并更新receive_result状态
 					super.send2Terminal(channel, msgbs);
-					dataActionMapper.updateActionReceiveResult(action.getActionId(), 1);
+					saUpdate.setReceiveResult(1);
+					sahUpdate.setReceiveResult(1);
+					sendActionMapper.updateById(saUpdate);
+					sendActionHisMapper.updateById(sahUpdate);
 				} else {
-					dataActionMapper.updateActionReceiveResult(action.getActionId(), -1);
+					saUpdate.setReceiveResult(-1);
+					sahUpdate.setReceiveResult(-1);
+					sendActionMapper.updateById(saUpdate);
+					sendActionHisMapper.updateById(sahUpdate);
 				}
 			} catch (Exception e) {
-				dataActionMapper.updateActionReceiveResult(action.getActionId(), -1);
 				e.printStackTrace();
 			}
     	}
@@ -80,9 +99,13 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
     
     //处理要发送给终端的参数
     public void processSendParamMsg() throws Exception {
-    	List<SendParam> params = dataParamMapper.findSendParamData();
+    	List<SendParam> params = sendParamMapper.findSendParam();
     	for (SendParam param: params) {
     		try {
+        		SendParam spUpdate = new SendParam();
+        		SendParamHis sphUpdate = new SendParamHis();
+        		spUpdate.setParamId(param.getParamId());
+        		sphUpdate.setParamId(param.getParamId());
 				int paramType = param.getParamType();
 				byte[] bodybs = null;
 				if (paramType == 1) {
@@ -122,9 +145,15 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 				if (channel != null && channel.isOpen()) {
 					//发送byte[]给终端并更新receive_result状态
 					super.send2Terminal(channel, msgbs);
-					dataParamMapper.updateParamReceiveResult(param.getParamId(), 1);
+					spUpdate.setReceiveResult(1);
+					sphUpdate.setReceiveResult(1);
+					sendParamMapper.updateById(spUpdate);
+					sendParamHisMapper.updateById(sphUpdate);
 				} else {
-					dataParamMapper.updateParamReceiveResult(param.getParamId(), -1);
+					spUpdate.setReceiveResult(-1);
+					sphUpdate.setReceiveResult(-1);
+					sendParamMapper.updateById(spUpdate);
+					sendParamHisMapper.updateById(sphUpdate);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

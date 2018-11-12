@@ -14,9 +14,9 @@ public interface VehicleRunMapper extends BaseMapper<VehicleRun> {
 	
 	int updateCarRuntime(@Param(value = "locationInfo") LocationInfo locationInfo);
 	
-	int setCarOnlineState(@Param(value = "devPhone") String devPhone);
+	int setVehicleOnline(@Param(value = "licNumber") String licNumber);
 	
-	int setCarOfflineState(@Param(value = "idleTime") String idleTime);
+	int setVehicleOffline(@Param(value = "idleTime") String idleTime);
 	
 	List<VehicleRun> findPassword(@Param(value = "licNumber") String licNumber);
 }

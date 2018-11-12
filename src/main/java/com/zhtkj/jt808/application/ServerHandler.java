@@ -5,8 +5,10 @@ import com.zhtkj.jt808.service.TerminalMsgProcessService;
 import com.zhtkj.jt808.service.codec.MsgDecoder;
 import com.zhtkj.jt808.vo.PackageData;
 import com.zhtkj.jt808.vo.PackageData.MsgBody;
+import com.zhtkj.jt808.vo.req.AuthMsg;
 import com.zhtkj.jt808.vo.req.EventMsg;
 import com.zhtkj.jt808.vo.req.LocationMsg;
+import com.zhtkj.jt808.vo.req.SelfCheckMsg;
 import com.zhtkj.jt808.vo.req.VersionMsg;
 
 import io.netty.buffer.ByteBuf;
@@ -75,15 +77,17 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 		int bodyId = body.getBodyId();
 		//任务类业务处理，这里是接收终端主动上报的信息，包括登录、上报的位置信息、上报的事件等等
 		if (bodyId == JT808Const.TASK_BODY_ID_LOGIN) {
-			this.msgProcessService.processLoginMsg(packageData);
+			AuthMsg authMsg = this.msgDecoder.toAuthMsg(packageData);
+			this.msgProcessService.processAuthMsg(authMsg);
 		} else if (bodyId == JT808Const.TASK_BODY_ID_GPS) {
-			LocationMsg msg = this.msgDecoder.toLocationMsg(packageData);
-			this.msgProcessService.processLocationMsg(msg);
+			LocationMsg locationMsg = this.msgDecoder.toLocationMsg(packageData);
+			this.msgProcessService.processLocationMsg(locationMsg);
 		} else if (bodyId == JT808Const.TASK_BODY_ID_EVENT) {
-			EventMsg msg = this.msgDecoder.toEventMsg(packageData);
-			this.msgProcessService.processEventMsg(msg);
+			EventMsg eventMsg = this.msgDecoder.toEventMsg(packageData);
+			this.msgProcessService.processEventMsg(eventMsg);
 		} else if (bodyId == JT808Const.TASK_BODY_ID_SELFCHECK) {
-			this.msgProcessService.processSelfCheckMsg(packageData);
+			SelfCheckMsg selfCheckMsg = this.msgDecoder.toSelfCheckMsg(packageData);
+			this.msgProcessService.processSelfCheckMsg(selfCheckMsg);
 		} else if (bodyId == JT808Const.TASK_BODY_ID_VERSION) {
 			VersionMsg msg = this.msgDecoder.toVersionMsg(packageData);
 			this.msgProcessService.processVersionMsg(msg);

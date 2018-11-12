@@ -2,8 +2,14 @@ package com.zhtkj.jt808.entity;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
+@TableName("zt_send_action")
 public class SendAction {
 
+	@TableId(type = IdType.INPUT)
 	private Integer actionId;
 	private Integer tenantId;
 	private String licNumber;

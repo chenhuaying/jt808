@@ -12,10 +12,14 @@ import com.zhtkj.jt808.util.DigitUtil;
 import com.zhtkj.jt808.vo.PackageData;
 import com.zhtkj.jt808.vo.PackageData.MsgBody;
 import com.zhtkj.jt808.vo.PackageData.MsgHead;
+import com.zhtkj.jt808.vo.req.AuthMsg;
+import com.zhtkj.jt808.vo.req.AuthMsg.AuthInfo;
 import com.zhtkj.jt808.vo.req.EventMsg;
 import com.zhtkj.jt808.vo.req.EventMsg.EventInfo;
 import com.zhtkj.jt808.vo.req.LocationMsg;
 import com.zhtkj.jt808.vo.req.LocationMsg.LocationInfo;
+import com.zhtkj.jt808.vo.req.SelfCheckMsg;
+import com.zhtkj.jt808.vo.req.SelfCheckMsg.SelfCheckInfo;
 import com.zhtkj.jt808.vo.req.VersionMsg;
 import com.zhtkj.jt808.vo.req.VersionMsg.VersionInfo;
 
@@ -84,6 +88,71 @@ public class MsgDecoder {
 		msgBody.setResult(data[6]);
 		msgBody.setBodyBytes(data);
     	return msgBody;
+	}
+	
+	//解码验证信息包
+	public AuthMsg toAuthMsg(PackageData packageData) throws UnsupportedEncodingException {
+		AuthMsg authMsg = new AuthMsg(packageData);
+		AuthInfo authInfo = new AuthInfo();
+		byte[] bodybs = authMsg.getMsgBody().getBodyBytes();
+		
+		//处理上报时间
+        String year = DigitUtil.bcdToStr(bodybs[18]);
+        String month = DigitUtil.bcdToStr(bodybs[19]);
+        String day = DigitUtil.bcdToStr(bodybs[20]);
+        String hour = DigitUtil.bcdToStr(bodybs[21]);
+        String minute = DigitUtil.bcdToStr(bodybs[22]);
+        String second = DigitUtil.bcdToStr(bodybs[23]);
+        String reportTime = "20" + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        authInfo.setReportTime(reportTime);
+        //处理车牌号码
+        String licNumber = new String(DigitUtil.sliceBytes(bodybs, 8, 15), "GBK");
+        authInfo.setLicNumber(licNumber);
+        //处理司机ID
+        authInfo.setDriverId(new String(DigitUtil.sliceBytes(bodybs, 16, 25)));
+        //处理核准证ID
+        authInfo.setLicenseId(new String(DigitUtil.sliceBytes(bodybs, 26, 35)));
+        //处理经度
+        float longitude = DigitUtil.byte4ToLong(bodybs, 36);
+        authInfo.setLongitude(longitude*25/9/1000000);
+        //处理纬度
+        float latitude = DigitUtil.byte4ToLong(bodybs, 40);
+        authInfo.setLatitude(latitude*25/9/1000000);
+        //处理密码
+        String password = new String(DigitUtil.sliceBytes(bodybs, 44, 53), "GBK");
+        authInfo.setPassword(password);
+		return authMsg;
+	}
+	
+	//解码验证信息包
+	public SelfCheckMsg toSelfCheckMsg(PackageData packageData) throws UnsupportedEncodingException {
+		SelfCheckMsg selfCheckMsg = new SelfCheckMsg(packageData);
+		SelfCheckInfo selfCheckInfo = new SelfCheckInfo();
+		byte[] bodybs = selfCheckMsg.getMsgBody().getBodyBytes();
+		
+		//处理上报时间
+        String year = DigitUtil.bcdToStr(bodybs[18]);
+        String month = DigitUtil.bcdToStr(bodybs[19]);
+        String day = DigitUtil.bcdToStr(bodybs[20]);
+        String hour = DigitUtil.bcdToStr(bodybs[21]);
+        String minute = DigitUtil.bcdToStr(bodybs[22]);
+        String second = DigitUtil.bcdToStr(bodybs[23]);
+        String reportTime = "20" + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        selfCheckInfo.setReportTime(reportTime);
+        //处理车牌号码
+        String licNumber = new String(DigitUtil.sliceBytes(bodybs, 8, 15), "GBK");
+        selfCheckInfo.setLicNumber(licNumber);
+        //处理司机ID
+        selfCheckInfo.setDriverId(new String(DigitUtil.sliceBytes(bodybs, 16, 25)));
+        //处理核准证ID
+        selfCheckInfo.setLicenseId(new String(DigitUtil.sliceBytes(bodybs, 26, 35)));
+        //处理经度
+        float longitude = DigitUtil.byte4ToLong(bodybs, 36);
+        selfCheckInfo.setLongitude(longitude*25/9/1000000);
+        //处理纬度
+        float latitude = DigitUtil.byte4ToLong(bodybs, 40);
+        selfCheckInfo.setLatitude(latitude*25/9/1000000);
+		return selfCheckMsg;
 	}
 	
 	//解码基本位置包

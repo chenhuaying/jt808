@@ -2,17 +2,11 @@ package com.zhtkj.jt808.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.zhtkj.jt808.entity.SendAction;
-import com.zhtkj.jt808.vo.PackageData.MsgBody;
 
-public interface SendActionMapper {
-
-	int updateActionDealResult(@Param(value = "msgBody") MsgBody msgBody);
+public interface SendActionMapper extends BaseMapper<SendAction> {
 	
-	int updateActionReceiveResult(@Param(value = "actionId") Integer actionId,
-			                      @Param(value = "receiveResult") Integer receiveResult);
+	List<SendAction> findSendAction();
 	
-	List<SendAction> findSendActionData();
 }

@@ -2,17 +2,11 @@ package com.zhtkj.jt808.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.zhtkj.jt808.entity.SendParam;
-import com.zhtkj.jt808.vo.PackageData.MsgBody;
 
-public interface SendParamMapper {
+public interface SendParamMapper extends BaseMapper<SendParam> {
 
-	int updateParamResult(@Param(value = "msgBody") MsgBody msgBody);
+	List<SendParam> findSendParam();
 	
-	int updateParamReceiveResult(@Param(value = "paramId") Integer paramId,
-            @Param(value = "receiveResult") Integer receiveResult);
-	
-	List<SendParam> findSendParamData();
 }

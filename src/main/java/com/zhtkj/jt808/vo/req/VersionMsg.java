@@ -34,7 +34,7 @@ public class VersionMsg extends PackageData {
 		private String licNumber;
 		private String simNumber;
 		private String ecuType;
-		private String carType;
+		private String vehicleType;
 		private String version;
 		
 		public String getMac() {
@@ -70,11 +70,11 @@ public class VersionMsg extends PackageData {
 		}
 		
 		public String getCarType() {
-			return carType;
+			return vehicleType;
 		}
 		
 		public void setCarType(String carType) {
-			this.carType = carType;
+			this.vehicleType = carType;
 		}
 		
 		public String getVersion() {
