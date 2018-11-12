@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhtkj.jt808.mapper.VehicleRunMapper">
+	
+	<update id="updateVehicle">
+		update 
+		  zt_vehicle_run
+		set 
+		  sim_number = '${locationInfo.simNumber}',
+		  latitude = '${locationInfo.latitude}',
+		  longitude = '${locationInfo.longitude}',
+		  altitude = '${locationInfo.altitude}',
+		  speed = '${locationInfo.speed}',
+		  direction = '${locationInfo.direction}',
+		  box_close = '${locationInfo.boxClose}',
+		  box_empty = '${locationInfo.boxEmpty}',
+		  box_up = '${locationInfo.boxUp}',
+		  weigui = '${locationInfo.weigui}',
+		  state = '${locationInfo.state}',
+		  driver_id = '${locationInfo.driverId}',
+		  
+		  box_close = '${locationInfo.boxClose}',
+		  car_passport = '${locationInfo.workPassport}',
+		  car_state = '${locationInfo.carState}',
+		  car_weigui = '${locationInfo.carWeigui}',
+		  send_datetime = '${locationInfo.sendDatetime}',
+		  driver_id = '${locationInfo.driverId}',
+		  revice_datetime = now(),
+		  online_state = 1
+		where
+			dev_phone = '${locationInfo.devPhone}' 
+	</update>
+
+	<update id="setCarOnlineState">
+		update 
+		  zt_car_runtime
+		set 
+		  online_datetime = now(),
+		  online_state = 1
+		where
+		  dev_phone = '${devPhone}' 
+	</update>
+	
+    <update id="setCarOfflineState">
+		update 
+		  zt_car_runtime
+		set 
+		  offline_datetime = now(),
+		  online_state = 0
+		where
+		  revice_datetime &lt;= '${idleTime}'
+		  and online_state = 1
+	</update>
+	
+	<select id="findPassword" resultType="com.zhtkj.jt808.entity.CarRuntime">
+		select 
+		  password 
+	    from 
+	      zt_car_runtime 
+	    where 
+	      lic_number = '${licNumber}'
+	    limit 1
+	</select>
+</mapper>

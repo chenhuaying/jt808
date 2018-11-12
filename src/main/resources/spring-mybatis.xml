@@ -1,0 +1,105 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx.xsd">	
+    
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+	<bean id="gatewayDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="name" value="gatewayDataSource" />
+		<property name="driverClassName" value="${jdbc.gateway.driver}"/>
+		<property name="url" value="${jdbc.gateway.url}" />
+		<property name="username" value="${jdbc.gateway.username}"/>
+		<property name="password" value="${jdbc.gateway.password}"/>
+		<!-- 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时  -->
+		<property name="initialSize" value="1"/>
+		<!-- 最大连接池数量 -->
+		<property name="maxActive" value="30"/>
+		<!-- 最小连接池数量 -->
+		<property name="minIdle" value="0"/>
+		<!-- 当连接池中连接已经用完了，等待建立一个新连接的最大毫秒数 -->
+		<property name="maxWait" value="30000"/>
+		<!-- 配置多长时间算执行很慢的sql, 默认3秒 -->
+		<property name="connectionProperties" value="druid.stat.slowSqlMillis=60000" />
+		<!-- 是否关闭长时间不使用的连接,检查连接是否泄漏时可以打开 -->
+		<property name="removeAbandoned" value="false"/>
+		<!-- 1800秒，也就是30分钟就关闭这个连接 -->
+		<property name="removeAbandonedTimeout" value="1800"/>
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<!-- <property name="logAbandoned" value="true"/> -->
+		<!-- 有两个含义：1) Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接 
+			 2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+		<!-- 连接保持空闲而不被驱逐的最小时间 -->
+		<property name="minEvictableIdleTimeMillis" value="1800000"/>
+		<!-- 连接保持空闲而不被驱逐的最大时间 -->
+		<property name="maxEvictableIdleTimeMillis" value="3600000"/>
+		<!-- 物理连接初始化的时候执行的sql -->
+		<property name="connectionInitSqls" value="select '1' from dual"/>
+		<!-- 用来检测连接是否有效的sql，要求是一个查询语句 -->
+		<property name="validationQuery" value="SELECT 'x' from dual"/>
+		<property name="validationQueryTimeout" value="60"/>
+		<property name="testWhileIdle" value="false"/>
+		<!-- 申请连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+		<property name="testOnBorrow" value="false"/>
+		<!-- 归还连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+		<property name="testOnReturn" value="false"/>
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小, 支持游标的的建议开启,mysql建议关闭 -->
+		<property name="poolPreparedStatements" value="true"/>
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+	</bean>
+	
+	<bean id="gatewaySqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+        <property name="dataSource" ref="gatewayDataSource"/>
+        <property name="mapperLocations" value="classpath:com/zhtkj/jt808/mapper/*.xml"/>
+        <property name="configLocation" value="classpath:spring-mybatis-config.xml"/>
+        <property name="typeAliasesPackage" value="com.zhtkj.jt808.entity"/>
+        <!-- <property name="typeEnumsPackage" value="com.baomidou.springmvc.model.enums"/> -->
+        <property name="plugins">
+            <array>
+                <!-- 分页插件配置 -->
+                <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
+                </bean>
+            </array>
+        </property>
+	    <!-- 全局配置注入 -->
+	    <property name="globalConfig" ref="globalConfig" />
+	</bean>
+	
+	<!-- MyBatis动态扫描  -->
+    <bean id="mapperScannerConfigurerGateway" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.zhtkj.jt808.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="gatewaySqlSessionFactory"/>
+    </bean>
+    
+    <!-- 开启注解式事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+     
+    <!-- 配置事务管理 -->
+    <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="gatewayDataSource"/>
+    </bean>
+    
+	<bean id="globalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+	    <!--
+			AUTO->`0`("数据库ID自增")
+		 	INPUT->`1`(用户输入ID")
+			ID_WORKER->`2`("全局唯一ID")
+			UUID->`3`("全局唯一ID")
+		-->
+	    <property name="idType" value="0" />
+	    <property name="dbType" value="mysql"/>
+	    <!-- 全局表为下划线命名设置 true -->
+	    <!-- <property name="dbColumnUnderline" value="true" /> -->
+<!--         <property name="metaObjectHandler">
+            <bean class="com.baomidou.springmvc.common.MyMetaObjectHandler" />
+        </property> -->
+	</bean>
+</beans>

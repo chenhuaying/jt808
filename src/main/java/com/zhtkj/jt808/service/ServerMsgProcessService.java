@@ -10,9 +10,9 @@ import com.zhtkj.jt808.common.JT808Const;
 import com.zhtkj.jt808.entity.VehicleRun;
 import com.zhtkj.jt808.entity.SendAction;
 import com.zhtkj.jt808.entity.SendParam;
-import com.zhtkj.jt808.mapper.CarRuntimeMapper;
-import com.zhtkj.jt808.mapper.DataActionMapper;
-import com.zhtkj.jt808.mapper.DataParamMapper;
+import com.zhtkj.jt808.mapper.VehicleRunMapper;
+import com.zhtkj.jt808.mapper.SendActionMapper;
+import com.zhtkj.jt808.mapper.SendParamMapper;
 import com.zhtkj.jt808.service.codec.MsgEncoder;
 
 import io.netty.channel.Channel;
@@ -25,13 +25,13 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
     private MsgEncoder msgEncoder;
     
     @Autowired
-	private CarRuntimeMapper carRuntimeMapper;
+	private VehicleRunMapper carRuntimeMapper;
 	
 	@Autowired
-	private DataActionMapper dataActionMapper;
+	private SendActionMapper dataActionMapper;
 	
 	@Autowired
-    private DataParamMapper dataParamMapper;
+    private SendParamMapper dataParamMapper;
     
     //处理要发送给终端的指令
     public void processSendActionMsg() throws Exception {

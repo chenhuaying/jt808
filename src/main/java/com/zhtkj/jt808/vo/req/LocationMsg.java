@@ -36,8 +36,8 @@ public class LocationMsg extends PackageData {
 		
 		private String licNumber; //车牌号码
 		private String simNumber; //终端sim
-		private float longitude; //经度
-		private float latitude; //纬度
+		private double longitude; //经度
+		private double latitude; //纬度
 		private float altitude; //高程
 		private float speed; //速度
 		private float direction; //方向
@@ -48,6 +48,7 @@ public class LocationMsg extends PackageData {
 		private byte boxClose; //车厢状态，1：关闭；2：打开
 		private byte boxUp; //举升状态，1：平放；2：举升；3：完全举升
 		private byte boxEmpty; //空重状态，1：空车；2：重车
+		private byte valid; //gps状态
 		private byte weigui; //违规情况，1：违规；0：未违规
 		
 		public String getLicNumber() {
@@ -68,16 +69,16 @@ public class LocationMsg extends PackageData {
 		public void setState(String state) {
 			this.state = state;
 		}
-		public float getLongitude() {
+		public double getLongitude() {
 			return longitude;
 		}
-		public void setLongitude(float longitude) {
+		public void setLongitude(double longitude) {
 			this.longitude = longitude;
 		}
-		public float getLatitude() {
+		public double getLatitude() {
 			return latitude;
 		}
-		public void setLatitude(float latitude) {
+		public void setLatitude(double latitude) {
 			this.latitude = latitude;
 		}
 		public float getAltitude() {
@@ -133,6 +134,12 @@ public class LocationMsg extends PackageData {
 		}
 		public void setBoxEmpty(byte boxEmpty) {
 			this.boxEmpty = boxEmpty;
+		}
+		public byte getValid() {
+			return valid;
+		}
+		public void setValid(byte valid) {
+			this.valid = valid;
 		}
 		public byte getWeigui() {
 			return weigui;

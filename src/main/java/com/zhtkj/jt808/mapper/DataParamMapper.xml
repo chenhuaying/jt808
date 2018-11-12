@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhtkj.jt808.mapper.DataParamMapper">
+<mapper namespace="com.zhtkj.jt808.mapper.SendParamMapper">
 	
 	<update id="updateParamResult">
 		update 
@@ -21,7 +21,7 @@
 		  param_id = '${paramId}' 
 	</update>
 	
-	<select id="findSendParamData" resultType="com.zhtkj.jt808.entity.DataParam">
+	<select id="findSendParamData" resultType="com.zhtkj.jt808.entity.SendParam">
 		select 
 		  param_id paramId,
 	      car_pass carPass,

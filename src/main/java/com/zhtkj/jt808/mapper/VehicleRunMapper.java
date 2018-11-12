@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.zhtkj.jt808.entity.VehicleRun;
 import com.zhtkj.jt808.vo.req.LocationMsg.LocationInfo;
 
-public interface CarRuntimeMapper {
+public interface VehicleRunMapper extends BaseMapper<VehicleRun> {
 
-	int insertCarRuntime(@Param(value = "locationInfo") LocationInfo locationInfo);
+	int insertVehicleRun(@Param(value = "locationInfo") LocationInfo locationInfo);
 	
 	int updateCarRuntime(@Param(value = "locationInfo") LocationInfo locationInfo);
 	

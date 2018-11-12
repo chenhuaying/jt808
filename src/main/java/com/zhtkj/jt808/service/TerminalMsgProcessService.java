@@ -3,21 +3,25 @@ package com.zhtkj.jt808.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.zhtkj.jt808.common.JT808Const;
 import com.zhtkj.jt808.entity.DeviceConfig;
-import com.zhtkj.jt808.mapper.CarEventMapper;
-import com.zhtkj.jt808.mapper.CarHistoryMapper;
-import com.zhtkj.jt808.mapper.CarRuntimeMapper;
+import com.zhtkj.jt808.entity.VehicleRun;
+import com.zhtkj.jt808.mapper.EventMapper;
+import com.zhtkj.jt808.mapper.VehicleHisMapper;
+import com.zhtkj.jt808.mapper.VehicleRunMapper;
 import com.zhtkj.jt808.mapper.DeviceConfigMapper;
-import com.zhtkj.jt808.mapper.DataActionMapper;
-import com.zhtkj.jt808.mapper.DataParamMapper;
+import com.zhtkj.jt808.mapper.SendActionMapper;
+import com.zhtkj.jt808.mapper.SendParamMapper;
 import com.zhtkj.jt808.service.codec.MsgEncoder;
 import com.zhtkj.jt808.util.CarEventUtil;
 import com.zhtkj.jt808.util.CarHistoryUtil;
@@ -41,19 +45,19 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     private MsgEncoder msgEncoder;
 
 	@Autowired
-    private CarRuntimeMapper carRuntimeMapper;
+    private VehicleRunMapper vehicleRunMapper;
     
 	@Autowired
-    private CarHistoryMapper carHistoryMapper;
+    private VehicleHisMapper vehicleHisMapper;
 	
 	@Autowired
-    private CarEventMapper carEventMapper;
+    private EventMapper carEventMapper;
     
 	@Autowired
-    private DataActionMapper dataActionMapper;
+    private SendActionMapper dataActionMapper;
     
 	@Autowired
-    private DataParamMapper dataParamMapper;
+    private SendParamMapper dataParamMapper;
     
 	@Autowired
     private DeviceConfigMapper deviceConfigMapper;
@@ -64,7 +68,7 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
         Session session = new Session(terminalPhone, packageData.getChannel());
         session.setLastCommunicateTime(new DateTime());
         sessionManager.addSession(terminalPhone, session);
-        carRuntimeMapper.setCarOnlineState(terminalPhone);
+        vehicleRunMapper.setCarOnlineState(terminalPhone);
         //发送登录响应数据包给终端，暂时是不用验证就可以登录
         byte[] bs = this.msgEncoder.encode4LoginResp(packageData, new RespMsgBody((byte) 1));
         super.send2Terminal(packageData.getChannel(), bs);
@@ -72,13 +76,33 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
 
     //处理基本位置信息业务
     public void processLocationMsg(LocationMsg msg) throws Exception {
-    	LocationInfo locationInfo = msg.getLocationInfo();
-    	if (carRuntimeMapper.updateCarRuntime(locationInfo) == 0) {
-    		carRuntimeMapper.insertCarRuntime(locationInfo);
+    	LocationInfo locInfo = msg.getLocationInfo();
+    	VehicleRun vehRun = new VehicleRun();
+    	vehRun.setLicNumber(locInfo.getLicNumber());
+    	vehRun.setTenantId(430121);
+    	vehRun.setSimNumber(locInfo.getSimNumber());
+    	vehRun.setLatitude(locInfo.getLatitude());
+    	vehRun.setLongitude(locInfo.getLongitude());
+    	vehRun.setAltitude(locInfo.getAltitude());
+    	vehRun.setSpeed(locInfo.getSpeed());
+    	vehRun.setDirection(locInfo.getDirection());
+    	vehRun.setBoxClose((int)locInfo.getBoxClose());
+    	vehRun.setBoxEmpty((int)locInfo.getBoxEmpty());
+    	vehRun.setBoxUp((int)locInfo.getBoxUp());
+    	vehRun.setPassword("zt12345678");
+    	vehRun.setWeigui((int)locInfo.getWeigui());
+    	vehRun.setState(locInfo.getState());
+    	vehRun.setDriverId(locInfo.getDriverId());
+    	vehRun.setReportTime(DateTime.parse(locInfo.getReportTime(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate());
+    	vehRun.setOnlineState(1);
+    	vehRun.setOnlineTime(new Date());
+    	if (vehicleRunMapper.updateById(vehRun) == 0) {
+    		vehRun.setPassword(null);
+    		vehicleRunMapper.insert(vehRun);
     	}
     	//判断是否需要写入位置信息到数据库
-    	if (CarHistoryUtil.isPersistent(locationInfo)) {
-    		carHistoryMapper.insertCarHistory(DateTime.now().toString("M"), locationInfo);
+    	if (CarHistoryUtil.isPersistent(locInfo)) {
+    		vehicleHisMapper.insertCarHistory(DateTime.now().toString("M"), vehRun);
     	}
     	Session session = sessionManager.findSessionByKey(msg.getMsgHead().getTerminalPhone());
     	//如果session等于null则证明终端没有先发送登录包过来，需要主动断开该连接
@@ -102,7 +126,7 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     
     //处理自检信息业务
     public void processSelfCheckMsg(PackageData packageData) {
-    	carRuntimeMapper.setCarOnlineState(packageData.getMsgHead().getTerminalPhone());
+    	vehicleRunMapper.setCarOnlineState(packageData.getMsgHead().getTerminalPhone());
     }
     
     //处理终端版本信息业务

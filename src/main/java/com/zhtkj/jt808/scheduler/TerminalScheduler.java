@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.zhtkj.jt808.application.SessionManager;
-import com.zhtkj.jt808.mapper.CarRuntimeMapper;
+import com.zhtkj.jt808.mapper.VehicleRunMapper;
 import com.zhtkj.jt808.vo.Session;
 
 import io.netty.channel.Channel;
@@ -18,7 +18,7 @@ import io.netty.channel.Channel;
 public class TerminalScheduler {
 
 	@Autowired
-	private CarRuntimeMapper carRuntimeMapper;
+	private VehicleRunMapper carRuntimeMapper;
 	
 	/**
 	 * @Description: 移除没有持续上报数据的终端session, 并更改车辆实时表的车辆状态为离线状态   

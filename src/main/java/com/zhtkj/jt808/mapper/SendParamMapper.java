@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.zhtkj.jt808.entity.SendParam;
 import com.zhtkj.jt808.vo.PackageData.MsgBody;
 
-public interface DataParamMapper {
+public interface SendParamMapper {
 
 	int updateParamResult(@Param(value = "msgBody") MsgBody msgBody);
 	

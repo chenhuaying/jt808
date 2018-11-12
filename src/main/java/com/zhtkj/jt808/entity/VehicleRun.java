@@ -2,8 +2,14 @@ package com.zhtkj.jt808.entity;
 
 import java.util.Date;
 
-public class VehicleRun {
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 
+@TableName("zt_vehicle_run")
+public class VehicleRun {
+	
+	@TableId(type = IdType.INPUT)
 	private String licNumber;
 	private Integer tenantId;
 	private String simNumber;
@@ -16,7 +22,6 @@ public class VehicleRun {
 	private Integer boxEmpty;
 	private Integer boxUp;
 	private String password;
-	private Integer valid;
 	private Integer weigui;
 	private String state;
 	private String driverId;
@@ -111,14 +116,6 @@ public class VehicleRun {
 	
 	public void setBoxUp(Integer boxUp) {
 		this.boxUp = boxUp;
-	}
-	
-	public Integer getValid() {
-		return valid;
-	}
-	
-	public void setValid(Integer valid) {
-		this.valid = valid;
 	}
 	
 	public Integer getWeigui() {

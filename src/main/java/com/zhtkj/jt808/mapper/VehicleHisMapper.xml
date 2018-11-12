@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhtkj.jt808.mapper.VehicleHisMapper">
+
+	<insert id="insertVehicleHis">
+		insert into zt_vehicle_his_${month} (
+		  lic_number,
+		  tenant_id,
+		  sim_number,
+		  longitude,
+          latitude,
+          speed,
+          altitude,
+          direction,
+          box_close,
+          box_empty,
+          box_up,
+          state,
+          weigui,
+          driver_id,
+          report_time
+		)
+		values
+		  (
+		  	#{vehRun.licNumber},
+		  	#{vehRun.tenantId},
+		  	#{vehRun.simNumber},
+		  	#{vehRun.longitude},
+		    #{vehRun.latitude},
+		    #{vehRun.speed},
+		    #{vehRun.altitude},
+		    #{vehRun.direction},
+		    #{vehRun.boxClose},
+		    #{vehRun.boxEmpty},
+		    #{vehRun.boxUp},
+		    #{vehRun.state},
+		    #{vehRun.weigui},
+		    #{vehRun.driverId},
+		    to_date(#{vehRun.reportTime}, 'YYYY/MM/DD HH24:mi:ss')
+		  ) 
+	</insert>
+
+</mapper>
