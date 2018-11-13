@@ -147,7 +147,7 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     	deviceConfig.setLicNumber(versionInfo.getLicNumber());
     	deviceConfig.setSimNumber(versionInfo.getSimNumber());
     	deviceConfig.setEcuType(versionInfo.getEcuType());
-    	deviceConfig.setVehicleType(versionInfo.getCarType());
+    	deviceConfig.setVehicleType(versionInfo.getVehicleType());
     	deviceConfig.setReportTime(new Date());
     	if (deviceConfigMapper.updateById(deviceConfig) == 0) {
     		deviceConfig.setVersion(versionInfo.getVersion());

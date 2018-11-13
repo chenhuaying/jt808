@@ -275,7 +275,7 @@ public class MsgDecoder {
 		VersionInfo versionInfo = new VersionInfo();
 		byte[] bodybs = packageData.getMsgBody().getBodyBytes();
     	Integer ecuType = (int) bodybs[8];
-    	Integer carType = (int) bodybs[9];
+    	Integer vehicleType = (int) bodybs[9];
     	byte[] infobs = new byte[bodybs.length - 10];
     	for (int i = 0; i < bodybs.length - 10; i++) {
     		infobs[i] = bodybs[i + 10];
@@ -286,7 +286,7 @@ public class MsgDecoder {
     	versionInfo.setSimNumber(packageData.getMsgHead().getTerminalPhone());
     	versionInfo.setVersion(terminalInfo[2]);
     	versionInfo.setEcuType(ecuType.toString());
-    	versionInfo.setCarType(carType.toString());
+    	versionInfo.setVehicleType(vehicleType.toString());
     	versionMsg.setVersionInfo(versionInfo);
     	return versionMsg;
 	}

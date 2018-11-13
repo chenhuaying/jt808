@@ -55,19 +55,19 @@ public class VersionMsg extends PackageData {
 		public String getLicNumber() {
 			return licNumber;
 		}
-
+		
 		public void setLicNumber(String licNumber) {
 			this.licNumber = licNumber;
 		}
-
+		
 		public String getSimNumber() {
 			return simNumber;
 		}
-
+		
 		public void setSimNumber(String simNumber) {
 			this.simNumber = simNumber;
 		}
-
+		
 		public String getEcuType() {
 			return ecuType;
 		}
@@ -76,12 +76,12 @@ public class VersionMsg extends PackageData {
 			this.ecuType = ecuType;
 		}
 		
-		public String getCarType() {
+		public String getVehicleType() {
 			return vehicleType;
 		}
 		
-		public void setCarType(String carType) {
-			this.vehicleType = carType;
+		public void setVehicleType(String vehicleType) {
+			this.vehicleType = vehicleType;
 		}
 		
 		public String getVersion() {
@@ -92,4 +92,5 @@ public class VersionMsg extends PackageData {
 			this.version = version;
 		}
 	}
+	
 }
