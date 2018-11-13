@@ -15,7 +15,7 @@ import com.zhtkj.jt808.vo.Session;
 import io.netty.channel.Channel;
 
 @Component
-public class TerminalScheduler {
+public class VehicleTask {
 
 	@Autowired
 	private VehicleRunMapper vehicleRunMapper;

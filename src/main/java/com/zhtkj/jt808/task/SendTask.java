@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import com.zhtkj.jt808.service.ServerMsgProcessService;
 
 @Component
-public class SendDataScheduler {
+public class SendTask {
 
-	private static final Logger logger = LoggerFactory.getLogger(SendDataScheduler.class);
+	private static final Logger logger = LoggerFactory.getLogger(SendTask.class);
 	
 	@Autowired
 	private ServerMsgProcessService serverMsgProcessService;
