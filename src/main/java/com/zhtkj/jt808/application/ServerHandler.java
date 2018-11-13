@@ -1,8 +1,13 @@
 package com.zhtkj.jt808.application;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.zhtkj.jt808.common.JT808Const;
 import com.zhtkj.jt808.service.TerminalMsgProcessService;
 import com.zhtkj.jt808.service.codec.MsgDecoder;
+import com.zhtkj.jt808.service.codec.MsgEncoder;
+import com.zhtkj.jt808.util.HexStringUtils;
 import com.zhtkj.jt808.vo.PackageData;
 import com.zhtkj.jt808.vo.PackageData.MsgBody;
 import com.zhtkj.jt808.vo.req.AuthMsg;
@@ -22,6 +27,8 @@ import io.netty.util.ReferenceCountUtil;
  */
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
+	private static final Logger log = LoggerFactory.getLogger(MsgEncoder.class);
+	
     private MsgDecoder msgDecoder;
     private TerminalMsgProcessService msgProcessService;
     
@@ -39,6 +46,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 			}
 			byte[] bs = new byte[buf.readableBytes()];
 			buf.readBytes(bs);
+			log.info("-->:" + HexStringUtils.toHexString(bs));
 			//字节数据转换为针对于808消息结构的业务对象
 			PackageData pkg = this.msgDecoder.bytes2PackageData(bs);
 			//引用channel,以便回送数据给终端

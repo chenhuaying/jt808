@@ -8,13 +8,14 @@ import org.slf4j.LoggerFactory;
 
 import com.zhtkj.jt808.application.SessionManager;
 import com.zhtkj.jt808.common.JT808Const;
+import com.zhtkj.jt808.util.HexStringUtils;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 public class BaseMsgProcessService {
 
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger log = LoggerFactory.getLogger(BaseMsgProcessService.class);
 	
 	protected SessionManager sessionManager;
     
@@ -44,6 +45,7 @@ public class BaseMsgProcessService {
         }
         //将转义后的byte[]发送给终端
         if (channel.isOpen()) {
+        	log.info("<--:" + HexStringUtils.toHexString(bs));
         	channel.writeAndFlush(Unpooled.copiedBuffer(bs)).sync();
         }
 	}

@@ -2,6 +2,13 @@ package com.zhtkj.jt808.vo.req;
 
 import com.zhtkj.jt808.vo.PackageData;
 
+/**
+ * ClassName: AuthMsg 
+ * @Description: 登录鉴权消息
+ * @author nikotesla
+ * @date 2018年11月13日
+ */
+ 
 public class AuthMsg extends PackageData {
 
 	private AuthInfo authInfo;

@@ -2,6 +2,13 @@ package com.zhtkj.jt808.vo.req;
 
 import com.zhtkj.jt808.vo.PackageData;
 
+/**
+ * ClassName: SelfCheckMsg 
+ * @Description: 自检信息消息
+ * @author nikotesla
+ * @date 2018年11月13日
+ */
+ 
 public class SelfCheckMsg extends PackageData {
 
 	private SelfCheckInfo selfCheckInfo;
