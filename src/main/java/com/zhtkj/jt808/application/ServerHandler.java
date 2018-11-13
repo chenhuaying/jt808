@@ -46,14 +46,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 			}
 			byte[] bs = new byte[buf.readableBytes()];
 			buf.readBytes(bs);
-			log.info("-->:" + HexStringUtils.toHexString(bs));
+			log.info(">>:7e" + HexStringUtils.toHexString(bs) +"7e");
 			//字节数据转换为针对于808消息结构的业务对象
 			PackageData pkg = this.msgDecoder.bytes2PackageData(bs);
 			//引用channel,以便回送数据给终端
 			pkg.setChannel(ctx.channel());
 			this.processPackageData(pkg);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} finally {
 			ReferenceCountUtil.release(msg);
 		}

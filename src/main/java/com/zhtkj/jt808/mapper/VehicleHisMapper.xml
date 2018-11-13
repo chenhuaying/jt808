@@ -36,7 +36,7 @@
 		    #{vehRun.state},
 		    #{vehRun.weigui},
 		    #{vehRun.driverId},
-		    to_date(#{vehRun.reportTime}, 'YYYY/MM/DD HH24:mi:ss')
+		    now()
 		  ) 
 	</insert>
 

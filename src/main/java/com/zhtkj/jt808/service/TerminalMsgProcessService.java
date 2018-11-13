@@ -76,7 +76,7 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
 	
     //处理登录业务
     public void processAuthMsg(AuthMsg authMsg) throws Exception {
-        Session session = new Session(authMsg.getMsgHead().getTerminalPhone(), authMsg.getChannel());
+        Session session = new Session(authMsg.getChannel(), authMsg.getMsgHead().getTerminalPhone());
         session.setLastCommunicateTime(new DateTime());
         sessionManager.addSession(authMsg.getAuthInfo().getLicNumber(), session);
         //发送登录响应数据包给终端，不用验证就可以登录
@@ -118,6 +118,7 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     	if (session == null) {
     		locationMsg.getChannel().close();
     	} else {
+    		session.setVehicleRun(vehRun);
     		session.setLastCommunicateTime(DateTime.now());
             byte[] bs = this.msgEncoder.encode4LocationResp(locationMsg, new RespMsgBody((byte) 1));
             super.send2Terminal(locationMsg.getChannel(), bs);

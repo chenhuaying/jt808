@@ -92,7 +92,10 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 					sendActionHisMapper.updateById(sahUpdate);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				saUpdate.setReceiveResult(-1);
+				sahUpdate.setReceiveResult(-1);
+				sendActionMapper.updateById(saUpdate);
+				sendActionHisMapper.updateById(sahUpdate);
 			}
     	}
     }
@@ -101,11 +104,11 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
     public void processSendParamMsg() throws Exception {
     	List<SendParam> params = sendParamMapper.findSendParam();
     	for (SendParam param: params) {
+    		SendParam spUpdate = new SendParam();
+    		SendParamHis sphUpdate = new SendParamHis();
+    		spUpdate.setParamId(param.getParamId());
+    		sphUpdate.setParamId(param.getParamId());
     		try {
-        		SendParam spUpdate = new SendParam();
-        		SendParamHis sphUpdate = new SendParamHis();
-        		spUpdate.setParamId(param.getParamId());
-        		sphUpdate.setParamId(param.getParamId());
 				int paramType = param.getParamType();
 				byte[] bodybs = null;
 				if (paramType == 1) {
@@ -156,7 +159,10 @@ public class ServerMsgProcessService extends BaseMsgProcessService {
 					sendParamHisMapper.updateById(sphUpdate);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				spUpdate.setReceiveResult(-1);
+				sphUpdate.setReceiveResult(-1);
+				sendParamMapper.updateById(spUpdate);
+				sendParamHisMapper.updateById(sphUpdate);
 			}
     	}
     }

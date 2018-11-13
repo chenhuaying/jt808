@@ -1,13 +1,28 @@
 package com.zhtkj.jt808.application;
 
+import java.awt.CardLayout;
+import java.math.BigDecimal;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.zhtkj.jt808.entity.VehicleRun;
+import com.zhtkj.jt808.vo.Session;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
@@ -26,9 +41,13 @@ import io.netty.util.concurrent.Future;
  * ClassName: ServerApplication 
  * @Description: 主程序及引导程序
  */
-public class ServerApplication {
+public class ServerApplication extends JFrame {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServerApplication.class);
+	private static final long serialVersionUID = 1L;
+	
+	private static final Logger log = LoggerFactory.getLogger(ServerApplication.class);
+	
+	private static final JTable table = new JTable();
 	
 	public static AbstractApplicationContext appCtx;
 	
@@ -41,6 +60,32 @@ public class ServerApplication {
 
 	public ServerApplication(int port) {
 		this.port = port;
+		//初始化窗口容器相关控件
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1200, 618);
+		getContentPane().setLayout(new CardLayout(0, 0));
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		splitPane.setDividerLocation(200);
+		getContentPane().add(splitPane);
+		JScrollPane topPane = new JScrollPane();
+		splitPane.setLeftComponent(topPane);
+		JTextArea textArea = new JTextArea();
+		topPane.setViewportView(textArea);
+		JScrollPane bottomPane = new JScrollPane();
+		splitPane.setRightComponent(bottomPane);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"序号", "车牌号码", "SIM卡号", "纬度", "经度", "速度", "上线时间", "上报时间"
+			}
+		));
+		DefaultTableCellRenderer render = new DefaultTableCellRenderer();   
+		render.setHorizontalAlignment(JLabel.CENTER);   
+		table.setDefaultRenderer(Object.class, render);
+		bottomPane.setViewportView(table);
 	}
 
 	private void bind() throws Exception {
@@ -62,7 +107,7 @@ public class ServerApplication {
 						}
 					}).option(ChannelOption.SO_BACKLOG, 128)
 					.childOption(ChannelOption.SO_KEEPALIVE, true);
-			LOGGER.info(this.getName() + "启动完毕, 端口={}", this.port);
+			log.info("服务端启动完毕, 端口={}", this.port);
 			ChannelFuture channelFuture = serverBootstrap.bind(port).sync();
 			channelFuture.channel().closeFuture().sync();
 		} catch (Exception e) {
@@ -75,7 +120,7 @@ public class ServerApplication {
 
 	public synchronized void startServer() {
 		if (this.isRunning) {
-			throw new IllegalStateException(this.getName() + "已启动，不能重复启动");
+			throw new IllegalStateException("服务端已启动，不能重复启动");
 		}
 		this.isRunning = true;
 		
@@ -90,7 +135,7 @@ public class ServerApplication {
 
 	public synchronized void stopServer() {
 		if (!this.isRunning) {
-			throw new IllegalStateException(this.getName() + "未启动");
+			throw new IllegalStateException("服务端未启动");
 		}
 		this.isRunning = false;
 
@@ -105,24 +150,56 @@ public class ServerApplication {
 			e.printStackTrace();
 		}
 	}
-
-	private String getName() {
-		return "终端通讯服务端";
-	}
-
-	public static void main(String[] args) throws Exception {
-		//初始化spring容器
-        appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        
-        //初始化netty
-		new ServerApplication(6666).startServer();
-		
-		//初始化窗口，这个窗口只是用来展示服务端是否启动
-		JFrame frame = new JFrame();  
-        frame.setTitle("终端通讯服务端(这个窗口只是用来展示服务端是否启动)");
-        frame.setSize(618, 381);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+	public static void updateRow(Map<String, Session> vehicleRunMap) {
+		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+		for (int i = 0; i < tableModel.getRowCount(); i++) {
+			String licNumber = tableModel.getValueAt(i, 1).toString();
+			if (vehicleRunMap.get(licNumber) == null) {
+				tableModel.removeRow(i);
+			} else {
+				VehicleRun vehicleRun = vehicleRunMap.get(licNumber).getVehicleRun();
+				tableModel.setValueAt(vehicleRun.getSimNumber(), i, 2);
+				tableModel.setValueAt(new BigDecimal(vehicleRun.getLatitude()).setScale(6, BigDecimal.ROUND_HALF_DOWN), i, 3);
+				tableModel.setValueAt(new BigDecimal(vehicleRun.getLongitude()).setScale(6, BigDecimal.ROUND_HALF_DOWN), i, 4);
+				tableModel.setValueAt(vehicleRun.getSpeed(), i, 5);
+				tableModel.setValueAt(new DateTime(vehicleRun.getOnlineTime()).toString("yyyy-MM-dd HH:mm:ss"), i, 6);
+				tableModel.setValueAt(new DateTime(vehicleRun.getReportTime()).toString("yyyy-MM-dd HH:mm:ss"), i, 7);
+			}
+		}
+		vehicleRunMap.values().forEach((session) -> {
+			VehicleRun vehicleRun = session.getVehicleRun();
+			for (int i = 0; i < tableModel.getRowCount(); i++) {
+				if (vehicleRun != null && 
+					tableModel.getValueAt(i, 1).equals(vehicleRun.getLicNumber())) {
+					vehicleRun = null;
+				}
+			}
+			if (vehicleRun != null) {
+				tableModel.addRow(new Object[]{tableModel.getRowCount() + 1,
+					vehicleRun.getLicNumber(), 
+					vehicleRun.getSimNumber(), 
+					new BigDecimal(vehicleRun.getLatitude()).setScale(6, BigDecimal.ROUND_HALF_DOWN),
+					new BigDecimal(vehicleRun.getLongitude()).setScale(6, BigDecimal.ROUND_HALF_DOWN), 
+					vehicleRun.getSpeed(),
+					new DateTime(vehicleRun.getOnlineTime()).toString("yyyy-MM-dd HH:mm:ss"),
+					new DateTime(vehicleRun.getReportTime()).toString("yyyy-MM-dd HH:mm:ss")});
+			}
+		});
 	}
 	
+	public static void main(String[] args) {
+		try {
+			//初始化spring容器
+	        appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
+	        //初始化netty
+			new ServerApplication(6666).startServer();
+			//初始化窗口
+			ServerApplication frame = new ServerApplication(6666);
+			frame.setVisible(true);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

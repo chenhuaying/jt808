@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.zhtkj.jt808.application.ServerApplication;
 import com.zhtkj.jt808.application.SessionManager;
 import com.zhtkj.jt808.mapper.VehicleRunMapper;
 import com.zhtkj.jt808.vo.Session;
@@ -43,4 +44,8 @@ public class VehicleTask {
 		vehicleRunMapper.setVehicleOffline(idleTime.toString("yyyy-MM-dd HH:mm:ss"));
 	}
 	
+	@Scheduled(cron = "20/15 * * * * ?")
+	public void updateRow() {
+		ServerApplication.updateRow(SessionManager.getInstance().getSessionMap());
+	}
 }

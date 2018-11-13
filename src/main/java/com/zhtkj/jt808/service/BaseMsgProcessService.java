@@ -45,7 +45,7 @@ public class BaseMsgProcessService {
         }
         //将转义后的byte[]发送给终端
         if (channel.isOpen()) {
-        	log.info("<--:" + HexStringUtils.toHexString(bs));
+        	log.info("<<:" + HexStringUtils.toHexString(bs));
         	channel.writeAndFlush(Unpooled.copiedBuffer(bs)).sync();
         }
 	}

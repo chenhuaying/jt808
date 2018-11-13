@@ -121,6 +121,7 @@ public class MsgDecoder {
         //处理密码
         String password = new String(DigitUtil.sliceBytes(bodybs, 44, 53), "GBK");
         authInfo.setPassword(password);
+        authMsg.setAuthInfo(authInfo);
 		return authMsg;
 	}
 	
@@ -170,12 +171,12 @@ public class MsgDecoder {
         //处理纬度
         float latitude = DigitUtil.byte4ToLong(bodybs, 8);
         locationInfo.setLatitude(latitude*25/9/1000000);
-        //处理高程
+        //处理海拔
         float altitude = DigitUtil.byte2ToInt(new byte[] {bodybs[12], bodybs[13]});
         locationInfo.setAltitude(altitude);
         //处理速度
-        float gpsSpeed = DigitUtil.byte2ToInt(new byte[] {bodybs[14], bodybs[15]});
-        locationInfo.setSpeed(gpsSpeed);
+        float speed = DigitUtil.byte2ToInt(new byte[] {bodybs[14], bodybs[15]});
+        locationInfo.setSpeed(speed);
         //处理方向
         float direction = DigitUtil.byte2ToInt(new byte[] {bodybs[16], bodybs[17]});
         locationInfo.setDirection(direction/100);

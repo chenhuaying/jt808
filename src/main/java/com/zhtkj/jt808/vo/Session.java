@@ -2,6 +2,8 @@ package com.zhtkj.jt808.vo;
 
 import org.joda.time.DateTime;
 
+import com.zhtkj.jt808.entity.VehicleRun;
+
 import io.netty.channel.Channel;
 
 public class Session {
@@ -9,9 +11,10 @@ public class Session {
 	private String id;
 	private Channel channel;
 	private String terminalPhone;
+	private VehicleRun vehicleRun;
 	private DateTime lastCommunicateTime;
 	
-	public Session(String terminalPhone, Channel channel) {
+	public Session(Channel channel, String terminalPhone) {
 		this.id = channel.id().asLongText();
 		this.channel = channel;
 		this.terminalPhone = terminalPhone;
@@ -19,7 +22,7 @@ public class Session {
 
 	@Override
 	public String toString() {
-		return "Session [id=" + id + ", terminalPhone=" + terminalPhone + ", channel=" + channel + "]";
+		return "Session [id=" + id + ", channel=" + channel + ", terminalPhone=" + terminalPhone + "]";
 	}
 
 	
@@ -53,6 +56,14 @@ public class Session {
 	
 	public void setLastCommunicateTime(DateTime lastCommunicateTime) {
 		this.lastCommunicateTime = lastCommunicateTime;
+	}
+
+	public VehicleRun getVehicleRun() {
+		return vehicleRun;
+	}
+	
+	public void setVehicleRun(VehicleRun vehicleRun) {
+		this.vehicleRun = vehicleRun;
 	}
 
 }

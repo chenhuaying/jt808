@@ -51,8 +51,8 @@
     <logger name="org.springframework" level="ERROR">
         <appender-ref ref="errorAppender" />
     </logger>
-    <logger name="com.zhtkj" level="ERROR">
-        <appender-ref ref="console" />
+    <logger name="com.zhtkj" level="INFO">
+        <appender-ref ref="infoAppender" />
     </logger>
     
 	<!-- 日志输出级别 -->
