@@ -47,6 +47,7 @@ public class ServerApplication extends JFrame {
 	
 	private static final Logger log = LoggerFactory.getLogger(ServerApplication.class);
 	
+	private static final JTextArea textArea = new JTextArea();
 	private static final JTable table = new JTable();
 	
 	public static AbstractApplicationContext appCtx;
@@ -61,16 +62,16 @@ public class ServerApplication extends JFrame {
 	public ServerApplication(int port) {
 		this.port = port;
 		//初始化窗口容器相关控件
+		setTitle("终端通讯服务端程序");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 618);
 		getContentPane().setLayout(new CardLayout(0, 0));
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setDividerLocation(200);
+		splitPane.setDividerLocation(120);
 		getContentPane().add(splitPane);
 		JScrollPane topPane = new JScrollPane();
 		splitPane.setLeftComponent(topPane);
-		JTextArea textArea = new JTextArea();
 		topPane.setViewportView(textArea);
 		JScrollPane bottomPane = new JScrollPane();
 		splitPane.setRightComponent(bottomPane);
@@ -107,6 +108,7 @@ public class ServerApplication extends JFrame {
 						}
 					}).option(ChannelOption.SO_BACKLOG, 128)
 					.childOption(ChannelOption.SO_KEEPALIVE, true);
+			appendMsg("服务端启动完毕, 端口=" + this.port);
 			log.info("服务端启动完毕, 端口={}", this.port);
 			ChannelFuture channelFuture = serverBootstrap.bind(port).sync();
 			channelFuture.channel().closeFuture().sync();
@@ -120,7 +122,8 @@ public class ServerApplication extends JFrame {
 
 	public synchronized void startServer() {
 		if (this.isRunning) {
-			throw new IllegalStateException("服务端已启动，不能重复启动");
+			appendMsg("服务端已启动，不能重复启动");
+			throw new IllegalStateException("");
 		}
 		this.isRunning = true;
 		
@@ -135,6 +138,7 @@ public class ServerApplication extends JFrame {
 
 	public synchronized void stopServer() {
 		if (!this.isRunning) {
+			appendMsg("服务端未启动，无需停止");
 			throw new IllegalStateException("服务端未启动");
 		}
 		this.isRunning = false;
@@ -149,6 +153,13 @@ public class ServerApplication extends JFrame {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void appendMsg(String msg) {
+		if (textArea.getText().length() > 1000) {
+			textArea.setText("");
+		}
+		textArea.append(msg);
 	}
 	
 	public static void updateRow(Map<String, Session> vehicleRunMap) {
