@@ -7,24 +7,24 @@ import org.joda.time.DateTime;
 import com.zhtkj.jt808.vo.req.EventMsg.EventInfo;
 
 /** 
-* @ClassName: CarEventUtil 
+* @ClassName: VehicleEventUtil 
 * @Description: 每种类型的事件只能在相隔一定的时间后才能上报
 */
-public class CarEventUtil {
+public class VehicleEventUtil {
 
-	private static Hashtable <String, Hashtable<Object, Object>> carEventMap = new Hashtable <String, Hashtable <Object, Object>>();
+	private static Hashtable <String, Hashtable<Object, Object>> vehicleEventMap = new Hashtable <String, Hashtable <Object, Object>>();
 	
 	//判断是否需要写入车辆事件数据到数据库
 	public static boolean isPersistent(EventInfo eventInfo) {
-		String carNumber = eventInfo.getLocationInfo().getLicNumber();
+		String licNumber = eventInfo.getLocationInfo().getLicNumber();
 		int eventType = eventInfo.getEventType();
-		if (carEventMap.get(carNumber) == null) {
+		if (vehicleEventMap.get(licNumber) == null) {
 			Hashtable<Object,Object> innerMap = new Hashtable <Object, Object>();
 			innerMap.put(eventType, new DateTime());
-			carEventMap.put(carNumber, innerMap);
+			vehicleEventMap.put(licNumber, innerMap);
 			return true;
 		} else {
-			Hashtable<Object, Object> innerMap = carEventMap.get(carNumber);
+			Hashtable<Object, Object> innerMap = vehicleEventMap.get(licNumber);
 			if(!innerMap.containsKey(eventType)) {
 				innerMap.put(eventType, new DateTime());
 				return true;

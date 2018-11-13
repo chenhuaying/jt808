@@ -27,8 +27,8 @@ import com.zhtkj.jt808.mapper.SendParamMapper;
 import com.zhtkj.jt808.mapper.VehicleHisMapper;
 import com.zhtkj.jt808.mapper.VehicleRunMapper;
 import com.zhtkj.jt808.service.codec.MsgEncoder;
-import com.zhtkj.jt808.util.CarEventUtil;
-import com.zhtkj.jt808.util.CarHistoryUtil;
+import com.zhtkj.jt808.util.VehicleEventUtil;
+import com.zhtkj.jt808.util.VehicleHisUtil;
 import com.zhtkj.jt808.util.DigitUtil;
 import com.zhtkj.jt808.vo.PackageData;
 import com.zhtkj.jt808.vo.PackageData.MsgBody;
@@ -110,7 +110,7 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     		vehicleRunMapper.insert(vehRun);
     	}
     	//判断是否需要写入位置信息到数据库
-    	if (CarHistoryUtil.isPersistent(locInfo)) {
+    	if (VehicleHisUtil.isPersistent(locInfo)) {
     		vehicleHisMapper.insertVehicleHis(DateTime.now().toString("M"), vehRun);
     	}
     	Session session = sessionManager.findSessionByKey(vehRun.getLicNumber());
@@ -128,7 +128,7 @@ public class TerminalMsgProcessService extends BaseMsgProcessService {
     public void processEventMsg(EventMsg msg) throws Exception {
     	EventInfo eventInfo = msg.getEventInfo();
     	//判断是否需要写入事件到数据库
-    	if (CarEventUtil.isPersistent(eventInfo)) {
+    	if (VehicleEventUtil.isPersistent(eventInfo)) {
     		eventMapper.insertCarEvent(DateTime.now().toString("M"), eventInfo, eventInfo.getLocationInfo());
     	}
     }

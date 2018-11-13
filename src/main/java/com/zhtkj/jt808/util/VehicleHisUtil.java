@@ -9,61 +9,64 @@ import org.joda.time.DateTime;
 import com.zhtkj.jt808.vo.req.LocationMsg.LocationInfo;
 
 /** 
-* @ClassName: CarHistoryUtil 
+* @ClassName: VehicleHisUtil 
 * @Description: 过滤历史数据，主要是过滤白天的历史数据 
 */
-public class CarHistoryUtil {
+public class VehicleHisUtil {
 
-	private static Map<String, CarState> carState = new Hashtable<String, CarState>();
+	private static Map<String, VehicleState> vehicleState = new Hashtable<String, VehicleState>();
 	
 	//位置信息连续相同次数
 	private static Long LOCATION_SAME_TOTAL = 10L;
 	
 	//判断是否需要写入车辆历史数据到数据库
 	public static boolean isPersistent(LocationInfo locationInfo) {
-		CarState lastCarState = carState.get(locationInfo.getLicNumber());
-		CarState newCarState = new CarState();
-		newCarState.setLongitude(locationInfo.getLongitude() + "");
-		newCarState.setLatitude(locationInfo.getLatitude() + "");
-		newCarState.setBoxUp(locationInfo.getBoxUp() + "");
-		newCarState.setBoxEmpty(locationInfo.getBoxEmpty() + "");
+		VehicleState lastState = vehicleState.get(locationInfo.getLicNumber());
+		VehicleState newState = new VehicleState();
+		newState.setLongitude(locationInfo.getLongitude() + "");
+		newState.setLatitude(locationInfo.getLatitude() + "");
+		newState.setBoxClose(locationInfo.getBoxClose() + "");
+		newState.setBoxEmpty(locationInfo.getBoxEmpty() + "");
+		newState.setBoxUp(locationInfo.getBoxUp() + "");
 		boolean result  = true;
-		if (lastCarState == null) {
-			newCarState.setLocSameTotal(0L);
-			newCarState.setUpdateTime(new Date());
+		if (lastState == null) {
+			newState.setLocSameTotal(0L);
+			newState.setUpdateTime(new Date());
 			result =  true;
-		} else if (newCarState.getLongitude().equals(lastCarState.getLongitude()) && 
-				   newCarState.getLatitude().equals(lastCarState.getLatitude()) && 
-				   newCarState.getBoxUp().equals(lastCarState.getBoxUp()) && 
-				   newCarState.getBoxEmpty().equals(lastCarState.getBoxEmpty())) {
-			newCarState.setLocSameTotal(lastCarState.getLocSameTotal() + 1);
-			if (new DateTime(lastCarState.getUpdateTime()).plusMinutes(15).isBeforeNow()) {
-				newCarState.setUpdateTime(new Date());
+		} else if (newState.getLongitude().equals(lastState.getLongitude()) && 
+			newState.getLatitude().equals(lastState.getLatitude()) && 
+			newState.getBoxClose().equals(lastState.getBoxClose()) && 
+			newState.getBoxEmpty().equals(lastState.getBoxEmpty()) &&
+			newState.getBoxUp().equals(lastState.getBoxUp()) ) {
+			newState.setLocSameTotal(lastState.getLocSameTotal() + 1);
+			if (new DateTime(lastState.getUpdateTime()).plusMinutes(15).isBeforeNow()) {
+				newState.setUpdateTime(new Date());
 				result = true;
-			} else if (newCarState.getLocSameTotal() >= LOCATION_SAME_TOTAL) {
-				newCarState.setUpdateTime(lastCarState.getUpdateTime());
+			} else if (newState.getLocSameTotal() >= LOCATION_SAME_TOTAL) {
+				newState.setUpdateTime(lastState.getUpdateTime());
 				result = false;
 			} else {
-				newCarState.setUpdateTime(new Date());
+				newState.setUpdateTime(new Date());
 				result = true;
 			}
 		} else {
-			newCarState.setLocSameTotal(0L);
-			newCarState.setUpdateTime(new Date());
+			newState.setLocSameTotal(0L);
+			newState.setUpdateTime(new Date());
 			result =  true;
 		}
-		carState.put(locationInfo.getLicNumber(), newCarState);
+		vehicleState.put(locationInfo.getLicNumber(), newState);
 		return result;
 	}
 	
 }
 
-class CarState {
+class VehicleState {
 	
 	public String longitude;
 	public String latitude;
-	public String boxUp;
+	public String boxClose;
 	public String boxEmpty;
+	public String boxUp;
 	public Long locSameTotal;
 	public Date updateTime;
 	
@@ -113,6 +116,14 @@ class CarState {
 
 	public void setLocSameTotal(Long locSameTotal) {
 		this.locSameTotal = locSameTotal;
+	}
+	
+	public String getBoxClose() {
+		return boxClose;
+	}
+
+	public void setBoxClose(String boxClose) {
+		this.boxClose = boxClose;
 	}
 	
 }
